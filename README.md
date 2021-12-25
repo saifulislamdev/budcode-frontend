@@ -1,6 +1,53 @@
-# Getting Started with Create React App
+# BudCode Frontend
+
+There is a lack of access for resume builders (e.g., college students, new grads) and any level developer to gain experience working in software development group environments. Not everyone has the network to work with others, so finding new people to work with will help all parties grow and gain more experience. This will also help these developers in landing job opportunities due to how important previous projects are for employers, especially projects done in a team environment.
+
+BudCode is an online platform that allows software developers, at any level (novice students to seasoned professionals), to collaborate. BudCode allows innovators to look for team members by posting their project ideas along with relevant information about the project (description, requirements, keywords, etc.) to the website.
+
+This is the frontend service for the BudCode project. The project is created with the PERN stack (PostgreSQL, Express, React, and Node). It was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our Spring 2022 Senior Design II course at The City College of New York.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Setup
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/saifulislamdev/budcode-frontend
+```
+
+2. Install dependencies
+
+```bash
+npm i
+```
+
+3. Setup env file.
+   Create an .env file in the root of the repository with the following environment variables.
+
+```bash
+REACT_APP_PROXY="http://localhost:5000/api" # proxy server (value shown is default)
+```
+
+## Repo Structure
+
+All of the source code will be found in `/src` folder.
+
+### Components
+
+Components go in the `/src/components` folder.
+
+### Pages
+
+Pages go in the `/src/pages` folder.
+
+### Utility
+
+Config, global constants, helper functions, etc. go in the `/src/util` folder.
+
+### Assets
+
+Images go in the `/src/assets` folder.
 
 ## Available Scripts
 
@@ -9,15 +56,10 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
 ### `npm run build`
 
@@ -25,46 +67,11 @@ Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
