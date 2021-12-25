@@ -4,26 +4,27 @@ There is a lack of access for resume builders (e.g., college students, new grads
 
 BudCode is an online platform that allows software developers, at any level (novice students to seasoned professionals), to collaborate. BudCode allows innovators to look for team members by posting their project ideas along with relevant information about the project (description, requirements, keywords, etc.) to the website.
 
-This is the frontend service for the BudCode project. The project is created with the PERN stack (PostgreSQL, Express, React, and Node). It was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our Spring 2022 Senior Design II course at The City College of New York.
+This is the frontend service for the BudCode project. The project is created with the PERN stack (PostgreSQL, Express, React, and Node). The frontend service was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our Spring 2022 Senior Design II course at The City College of New York.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Setup
 
-1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/saifulislamdev/budcode-frontend
 ```
 
-2. Install dependencies
+### Install dependencies
 
 ```bash
 npm i
 ```
 
-3. Setup env file.
-   Create an .env file in the root of the repository with the following environment variables.
+### Setup env file
+
+Create an .env file in the root of the repository with the following environment variables.
 
 ```bash
 REACT_APP_PROXY="http://localhost:5000/api" # proxy server (value shown is default)
