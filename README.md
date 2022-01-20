@@ -1,12 +1,14 @@
 # BudCode Frontend
 
-There is a lack of access for resume builders (e.g., college students, new grads) and any level developer to gain experience working in software development group environments. Not everyone has the network to work with others, so finding new people to work with will help all parties grow and gain more experience. This will also help these developers in landing job opportunities due to how important previous projects are for employers, especially projects done in a team environment.
-
-BudCode is an online platform that allows software developers, at any level (novice students to seasoned professionals), to collaborate. BudCode allows innovators to look for team members by posting their project ideas along with relevant information about the project (description, requirements, keywords, etc.) to the website.
-
 This is the frontend service for the BudCode project. The project is created with the PERN stack (PostgreSQL, Express, React, and Node). The frontend service was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our Spring 2022 Senior Design II course at The City College of New York.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Context
+
+There is a lack of access for resume builders (e.g., college students, new grads) and any level developer to gain experience working in software development group environments. Not everyone has the network to work with others, so finding new people to work with will help all parties grow and gain more experience. This will also help these developers in landing job opportunities due to how important previous projects are for employers, especially projects done in team environments.
+
+BudCode is an online platform that allows software developers, at any level (novice students to seasoned professionals), to collaborate. BudCode allows innovators to look for team members by posting their project ideas along with relevant information about the project (description, requirements, keywords, etc.) to the website. The platform provides more features that aim to serve as interest points for developers, such as personalized project recommendations, recruiting potential team members, and much more.
 
 ## Setup
 
