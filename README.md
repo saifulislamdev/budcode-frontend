@@ -21,7 +21,7 @@ git clone https://github.com/saifulislamdev/budcode-frontend
 ### Install dependencies
 
 ```bash
-npm i
+npm install bootstrap
 ```
 
 ### Setup env file
