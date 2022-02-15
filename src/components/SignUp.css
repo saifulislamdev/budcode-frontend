@@ -1,6 +1,5 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 #main-container {
   /*place-items: center;*/
 }
@@ -16,5 +15,4 @@
   width: auto;
   height: auto;
   border-radius: 50%;
-  
 }

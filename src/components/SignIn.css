@@ -1,8 +1,7 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 #main-container {
-  /*place-items: center;*/
+  place-items: right ;
 }
 
 .header-css {
@@ -16,5 +15,4 @@
   width: auto;
   height: auto;
   border-radius: 50%;
-  
 }
