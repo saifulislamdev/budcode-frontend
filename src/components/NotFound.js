@@ -1,8 +1,8 @@
-import './Error.css';
+import './NotFound.css';
 
-export default function Error() {
+export default function NotFound() {
   return (
-    <div className = "errorPage">
+    <div className = "error-Page">
       <div>
         <div className = "errorMessage">
           <div className = "first">

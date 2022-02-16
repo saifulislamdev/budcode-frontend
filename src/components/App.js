@@ -3,7 +3,7 @@ import '../styles/index.css';
 import {BrowserRouter, Route, Routes, Router} from "react-router-dom";
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-import Error from './Error';
+import NotFound from './NotFound';
 
 function App() {
 
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route exact path="/SignUp" element={<SignUp/>}/>
         <Route exact path="/SignIn" element={<SignIn/>}/>
-        <Route exact path="/error" element={<Error/>}/>
+        <Route exact path="/NotFound" element={<NotFound/>}/>
       </Routes>
 
     </BrowserRouter>

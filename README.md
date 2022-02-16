@@ -21,8 +21,7 @@ git clone https://github.com/saifulislamdev/budcode-frontend
 ### Install dependencies
 
 ```bash
-npm install react-bootstrap bootstrap@5.1.3
-npm install --save react-router-dom
+npm i
 ```
 
 ### Setup env file
