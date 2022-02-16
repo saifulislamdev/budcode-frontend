@@ -1,8 +1,7 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 #main-container {
-  /*place-items: center;*/
+  place-items: right ;
 }
 
 .header-css {
@@ -11,10 +10,9 @@
   font-weight: normal;
 }
 
-.infoBanner {
+.info-Banner {
   background: url('../assets/picLogScreen.png');
   width: auto;
   height: auto;
   border-radius: 50%;
-  
 }
