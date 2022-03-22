@@ -1,0 +1,41 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+.profilepic {
+	position: absolute;
+	left: 200px;
+  }
+  
+  .Leader {
+	position:absolute;
+	left: 150px;
+	top: 300px;
+	right: 1450px;
+   
+  }
+  
+  .Member {
+	position: absolute;
+	left: 150px;
+	top: 500px;
+	right: 1450px;
+  }
+  
+  .Description {
+	position:absolute;
+	left: 550px;
+	top: 300px;
+	right: 700px;
+  }
+  
+  .Requirement {
+	position:absolute;
+	left: 1300px;
+	top: 300px;
+	right: 150px;
+  }
+  
+  .Submit {
+	position:absolute;
+	left: 900px;
+	top: 800px;
+  }
