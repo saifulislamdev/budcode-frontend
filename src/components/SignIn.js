@@ -1,11 +1,13 @@
 import React , {useState} from 'react';
 import { Link } from "react-router-dom";
-import picLogScreen from '../assets/picLogScreen.png'
+import picLogScreen3 from '../assets/picLogScreen3.png'
 import { Container, Form, Button, Row, Col} from 'react-bootstrap';
 import './SignIn.css';
 import { axiosInstance } from '../util/config';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
+
+
 
 export default function SignIn() {
 
@@ -37,7 +39,7 @@ export default function SignIn() {
                     password: password,
                 })
                 .then((response) => {
-                    navigate('/users/:id');
+                    navigate('/projects/create');
                     console.log(response);
                 })
                 .catch((err) => {
@@ -55,7 +57,7 @@ export default function SignIn() {
         <Container id="main-container" className="d-grid h-100">
             <div className = "split left">
                 <div className="centered">
-                    <img className="info-Banner" src={picLogScreen} alt="picLogScreen"/>
+                    <img className="info-Banner" src={picLogScreen3} alt="picLogScreen3"/>
                 </div>
             </div>
         

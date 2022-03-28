@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { Link } from "react-router-dom";
-import picLogScreen from '../assets/picLogScreen.png'
+import picLogScreen3 from '../assets/picLogScreen3.png'
 import { Container, Form, Button} from 'react-bootstrap';
 import './SignUp.css';
 import { axiosInstance } from '../util/config';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
+import {UserContext} from '../util/context';
 
 
 export default function SignUp() {
@@ -18,6 +19,7 @@ export default function SignUp() {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const {setAuthorization} = useContext(UserContext);
 
     let navigate = useNavigate(); 
     
@@ -59,7 +61,17 @@ export default function SignUp() {
                 })
                 .then((response) => {
                     alert("Account has been created!");
-                    navigate('/auth/signin');
+                    window.localStorage.setItem(
+                        'authorization',
+                        JSON.stringify(response.data.authorization)
+                    );
+                    window.localStorage.setItem(
+                        'username',
+                        JSON.stringify(response.data.user)
+                    );
+                   setAuthorization(response.data.authorization);
+                    
+                    navigate('/projects/create');
                     console.log(response);
                 })
                 .catch((err) => {
@@ -79,7 +91,7 @@ export default function SignUp() {
             
             <div className = "split left">
                 <div className="centered">
-                    <img className="info-Banner" src={picLogScreen} alt="picLogScreen"/>
+                    <img className="info-Banner" src={picLogScreen3} alt="picLogScreen3"/>
                 </div>
             </div>
               
@@ -146,7 +158,7 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="linktohomepage">
-                        <Link variant="secondary" type="submit" to='/auth/signin'>
+                        <Link variant="secondary" type="submit" to='/'>
                             Go back to homepage
                         </Link>
                         
