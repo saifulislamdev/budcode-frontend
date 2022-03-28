@@ -21,8 +21,9 @@ const Features = () => {
           <BsFillBookmarkStarFill color="navy" size={30} />
           <h2>Features</h2>
           <p className="u-text-small">
-            SocialX app has Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Sequi labore, harum officiis error quia cupiditate?
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique
+            itaque veniam laudantium, quam quas dolor tempora eligendi officia
+            sequi. Iusto.
           </p>
         </div>
         <div className="features-content">

@@ -71,7 +71,7 @@ export default function SignUp() {
                     );
                    setAuthorization(response.data.authorization);
                     
-                    navigate('/projects/create');
+                    navigate('/');
                     console.log(response);
                 })
                 .catch((err) => {

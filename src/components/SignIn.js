@@ -39,7 +39,7 @@ export default function SignIn() {
                     password: password,
                 })
                 .then((response) => {
-                    navigate('/projects/create');
+                    navigate('/');
                     console.log(response);
                 })
                 .catch((err) => {
