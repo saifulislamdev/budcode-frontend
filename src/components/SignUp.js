@@ -63,15 +63,15 @@ export default function SignUp() {
                     alert("Account has been created!");
                     window.localStorage.setItem(
                         'authorization',
-                        JSON.stringify(response.data.authorization)
+                        JSON.stringify(response.data.token)
                     );
                     window.localStorage.setItem(
                         'username',
-                        JSON.stringify(response.data.user)
+                        JSON.stringify(response.data.username)
                     );
-                   setAuthorization(response.data.authorization);
-                    
-                    navigate('/');
+                   setAuthorization(response.data.token);
+                   window.localStorage.clear();
+                    navigate('/auth/signin');
                     console.log(response);
                 })
                 .catch((err) => {
