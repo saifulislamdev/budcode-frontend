@@ -5,9 +5,16 @@ export const UserContextWrapper = ({children}) => {
     const [authorization, setAuthorization] = useState('');
 
     useEffect(() => {
-        if (window.localStorage.getItem('authorization')) {
-            setAuthorization(JSON.parse(window.localStorage.getItem('authorization')));
-        }
+        try {
+            if (window.localStorage.getItem('authorization')) {
+                setAuthorization(JSON.parse(window.localStorage.getItem('authorization')));
+            }
+            
+          } catch (err) {
+            // 👇️ This runs
+            console.log('Error: ', err.message);
+          }
+        
     }, []);
 
 return (

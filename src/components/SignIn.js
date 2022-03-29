@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React , {useContext, useState} from 'react';
 import { Link } from "react-router-dom";
 import picLogScreen3 from '../assets/picLogScreen3.png'
 import { Container, Form, Button, Row, Col} from 'react-bootstrap';
@@ -6,6 +6,7 @@ import './SignIn.css';
 import { axiosInstance } from '../util/config';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
+import {UserContext} from '../util/context';
 
 
 
@@ -15,7 +16,7 @@ export default function SignIn() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false); 
     const [errorMessage, setErrorMessage] = useState('');
-
+    const {setAuthorization} = useContext(UserContext);
     let navigate = useNavigate(); 
     
     const signInSchema = Yup.object().shape({
@@ -39,8 +40,20 @@ export default function SignIn() {
                     password: password,
                 })
                 .then((response) => {
+                    
+                    window.localStorage.setItem(
+                        'authorization',
+                        JSON.stringify(response.data.authorization)
+                    );
+                    window.localStorage.setItem(
+                        'username',
+                        JSON.stringify(response.data.user)
+                    );
+                   setAuthorization(response.data.authorization);
+                    alert("Account successfully logged in!");
                     navigate('/');
                     console.log(response);
+                    
                 })
                 .catch((err) => {
                     console.log(err);
