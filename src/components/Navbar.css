@@ -3,7 +3,9 @@
   justify-content: space-between;
   align-items: center;
   height: 8rem;
+  background: #0a1930;
 }
+
 
 .logo {
   display: flex;

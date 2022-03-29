@@ -43,13 +43,13 @@ export default function SignIn() {
                     
                     window.localStorage.setItem(
                         'authorization',
-                        JSON.stringify(response.data.authorization)
+                        JSON.stringify(response.data.token)
                     );
                     window.localStorage.setItem(
                         'username',
-                        JSON.stringify(response.data.user)
+                        JSON.stringify(response.data.username)
                     );
-                   setAuthorization(response.data.authorization);
+                   setAuthorization(response.data.token);
                     alert("Account successfully logged in!");
                     navigate('/');
                     console.log(response);

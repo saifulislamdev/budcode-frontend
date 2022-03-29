@@ -1,20 +1,63 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './ProfilePage.css';
 import { Container, Form, Button, Row, Col} from 'react-bootstrap';
-import picLogScreen from '../assets/picLogScreen.png'
+import Navbar from "./Navbar";
+import {UserContext} from '../util/context';
+import { axiosInstance } from '../util/config';
 
 export default function ProfilePage() {
+
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const user = JSON.parse(window.localStorage.getItem('username'));
+    const authorization = JSON.parse(window.localStorage.getItem('token'));
+    const [userInfo, setUserInfo] = useState({});
+   
+    useEffect(() => {
+        axiosInstance
+            .get(`/users/${user}` , {
+                headers: {authorization}
+
+            })
+            .then((response) => {
+                //setUserInfo(response.data.user)
+                console.log(response);
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+        
+    }, []);
+
+
     return (
+        
+
         <Container>
-            <Row>
+
+            
+            <div>
+            EDIT PROFILE
+        
+            </div>         
+          <Row>
                 <Col>
                 
                 <Form>
-                <Form.Label>Name</Form.Label>
+                <Form.Group>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control type="text"  readOnly />
+                <Form.Label>Last Name</Form.Label>
                 <Form.Control type="text" placeholder="Readonly input here..." readOnly />
+                <Form.Label>Gender</Form.Label>
+                <Form.Control type="text" placeholder="Readonly input here..." readOnly />
+                </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Age</Form.Label>
-                <Form.Control type="email" placeholder="name@example.com" />
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="text" placeholder="Readonly input here..." readOnly />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Occupation</Form.Label>
@@ -26,7 +69,7 @@ export default function ProfilePage() {
                 <Col>
                     <Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>About Me</Form.Label>
+                    <Form.Label>About Me (bio)</Form.Label>
                     <Form.Control as="textarea" rows={3} />
                     </Form.Group>
                     </Form>
@@ -34,7 +77,7 @@ export default function ProfilePage() {
                 <Col>
                     <Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Languages</Form.Label>
+                    <Form.Label>Languages (skills)</Form.Label>
                     <Form.Control as="textarea" rows={3} />
                     </Form.Group>
                     </Form>
@@ -45,19 +88,19 @@ export default function ProfilePage() {
                 <Col></Col>
                 <Col><Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Previous BudCode Projects</Form.Label>
+                    <Form.Label>Interest (interests)</Form.Label>
                     <Form.Control as="textarea" rows={3} />
                     </Form.Group>
                     </Form></Col>
                 <Col><Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Contact Information</Form.Label>
+                    <Form.Label>Contact Information (links)</Form.Label>
                     <Form.Control as="textarea" rows={3} />
                     </Form.Group>
                     </Form></Col>
             </Row>
 
-            <div classname = "edit-save-buttons">
+            <div className = "edit-save-buttons">
             <Form.Group className="mb-3" controlId="submitform">
                         <Button variant="outline-info" type="submit" >
                             Edit
@@ -70,15 +113,10 @@ export default function ProfilePage() {
                     </Form.Group>
 
             </div>
+                            
         </Container>
-
-               
-           
-
-
-      
         
-            
+   
 
 
       );
