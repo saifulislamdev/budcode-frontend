@@ -9,6 +9,7 @@ import ProfilePage from './ProfilePage';
 import Home from "./Home";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserContextWrapper} from '../context/userContextWrapper';
+import Navbar from './Navbar';
 
 
 function App() {
@@ -17,8 +18,11 @@ function App() {
     
 <UserContextWrapper>
       <BrowserRouter>
+      
       <Routes>
+        
         <Route exact path="/" element={<Home/>}/>
+ 
         <Route exact path="/auth/signup" element={<SignUp/>}/>
         <Route exact path="/auth/signin" element={<SignIn/>}/>
         <Route exact path="/projects/:id" element={<ProjectPage/>}/>
