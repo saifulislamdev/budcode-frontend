@@ -31,7 +31,10 @@ const Navbar = () => {
   
 
   return (
+
+    <div className ="coverBackGround">
     <nav className="navbar container">
+      
       <div className="logo">
         <BsCode color="#fff" size={33} />
         <p className="logo-text">
@@ -56,7 +59,7 @@ const Navbar = () => {
             <a href="/feed">Feed</a>
           </li>
           <li>
-            <a href="/projects/create">Create Project</a>
+            <a href="/projects/create">Create</a>
           </li>
           <li>
             <a href="/projects/search">Search</a>
@@ -83,7 +86,7 @@ const Navbar = () => {
             <a href="/">Home</a>
           </li>
           <li>
-            <a href="">Feed</a>
+            <a href="">Profile</a>
           </li>
           <li>
             <a href="">Project</a>
@@ -100,9 +103,6 @@ const Navbar = () => {
       
       </>
       }
-
-
-
       <div className="menu-icons" onClick={toggleMenu}>
         {showMenu ? (
           <RiCloseLine color="#fff" size={30} />
@@ -110,8 +110,10 @@ const Navbar = () => {
           <AiOutlineBars color="#fff" size={27} />
         )}
       </div>
-      
+     
     </nav>
+    </div>
+    
   );
 };
 

@@ -127,6 +127,10 @@ h1 span:nth-child(3) {
 
 .comp-pic {
   border: none;
+  position: relative;
+  flex: none;
+  max-width:100px;
+min-width: 550px;
   /* border-width: 0; */
   /* border-style: none; */
 }
