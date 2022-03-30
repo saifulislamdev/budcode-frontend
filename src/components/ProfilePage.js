@@ -119,8 +119,8 @@ export default function ProfilePage() {
                 <Form.Control type="text" defaultValue = {firstName} readOnly />
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control type="text" defaultValue = {lastName} readOnly />
-                <Form.Label>Gender</Form.Label>
-                <Form.Control type="text" defaultValue = "Male" readOnly />
+                {/*<Form.Label>Gender</Form.Label>
+                <Form.Control type="text" defaultValue = "Male" readOnly />*/}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Email</Form.Label>
