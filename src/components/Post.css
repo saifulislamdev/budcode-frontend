@@ -1,0 +1,12 @@
+.postDescription {
+    padding-top: 10px;
+    padding-bottom: 30px;
+    
+}
+
+.postCard {
+    width: 60%;
+    border: 1px solid gray;
+    border-spacing: 20px;
+
+}

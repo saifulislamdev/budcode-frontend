@@ -53,13 +53,13 @@ const Navbar = () => {
             <a href="/users/:id">Profile</a>
           </li>
           <li>
-            <a href="">Feed</a>
+            <a href="/feed">Feed</a>
           </li>
           <li>
-            <a href="">Create Project</a>
+            <a href="/projects/create">Create Project</a>
           </li>
           <li>
-            <a href="">Search</a>
+            <a href="/projects/search">Search</a>
           </li>
           <li>
             <a href="">Notification</a>
