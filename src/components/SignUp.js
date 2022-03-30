@@ -64,7 +64,7 @@ export default function SignUp() {
                     window.localStorage.setItem(
                         'authorization',
                         JSON.stringify(response.data.token)
-                    );
+                    ); 
                     window.localStorage.setItem(
                         'username',
                         JSON.stringify(response.data.username)

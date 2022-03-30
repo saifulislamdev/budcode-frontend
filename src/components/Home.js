@@ -9,10 +9,12 @@ import Team from "./Team"
 export default function Home() {
     return (
         <>
+        
         <header className="header-bg">
-          <Navbar/>
+        <Navbar/>
           <Header />
         </header>
+        
         <Features data-aos="fade-up" />
         <Team />
         <Faq />
