@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { Link } from "react-router-dom";
-import picLogScreen3 from '../assets/picLogScreen3.png'
+import budcodeLogo from '../assets/budcodeLogo.png'
 import { Container, Form, Button} from 'react-bootstrap';
 import './SignUp.css';
 import { axiosInstance } from '../util/config';
@@ -91,7 +91,7 @@ export default function SignUp() {
             
             <div className = "split left">
                 <div className="centered">
-                    <img className="info-Banner" src={picLogScreen3} alt="picLogScreen3"/>
+                    <img className="info-Banner" src={budcodeLogo} alt="budcodeLogo"/>
                 </div>
             </div>
               
@@ -107,22 +107,23 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicLastname">
-                        <Form.Label>Last Time</Form.Label>
+                        <Form.Label>Last Name</Form.Label>
                         <Form.Control className="name-input-css" type="name" placeholder="Enter last name" onChange={(e) => {setLastName(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicGender">
-                        <Form.Label>Choose A Gender</Form.Label>
+                        <Form.Label>Choose Your Gender</Form.Label>
                         <Form.Select aria-label="Default select example"> 
                             <option key='blankChoice' hidden value/>
                             <option value="Male" onChange={(e) => {setGender(e.target.value)}}>Male</option>
                             <option value="Female" onChange={(e) => {setGender(e.target.value)}}>Female</option>
+                            <option value="Other" onChange={(e) => {setGender(e.target.value)}}>Other</option>
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="email" placeholder="Create Username" onChange={(e) => {setUsername(e.target.value)}}/>
+                        <Form.Control type="text" placeholder="Create Username" onChange={(e) => {setUsername(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -138,7 +139,7 @@ export default function SignUp() {
                         <Form.Control
                             type="password"
                             placeholder="Password" onChange={(e) => {setPassword(e.target.value)}}/>
-                        <Form.Text id="passwordHelpBlock" muted>
+                        <Form.Text id="password-Help-Block" muted>
                             Your password must be 8-20 characters long, contain letters and numbers, and
                             must not contain spaces, special characters, or emoji.
                         </Form.Text>
@@ -152,7 +153,7 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="submitform">
-                        <Button variant="outline-info" to='/auth/signin' type="submit" onClick={handleClick}>
+                        <Button variant="outline-info" type="submit" onClick={handleClick}>
                             Submit
                         </Button> 
                     </Form.Group>
