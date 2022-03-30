@@ -1,0 +1,52 @@
+.postapp {
+    display: flex;
+}
+
+.feed {
+    flex: 0.4;
+    min-width: fit-content;
+    overflow-y: scroll;
+}
+
+.feed::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .feed {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+
+
+.feedHeader {
+    padding: 10px;
+}
+
+.feedBox {
+    padding-bottom: 30px;
+    border-bottom: 10px;
+    width: 60%;
+    border: 1px solid lightskyblue;
+}
+
+.feedBox-input {
+    padding: 20px;
+    
+}
+
+.feedBox-input > input {
+    flex: 1;
+    font-size: 20px;
+    border: none;
+}
+
+.sidebar {
+    display: flex;
+}
+
+.postbutton {
+    float: right;
+    padding-bottom: 20px;
+}

@@ -1,0 +1,24 @@
+.search {
+   padding: 30px;
+   margin-top: 10%;
+}
+
+.search-section {
+    float: right;
+    width: 65%;
+    
+}
+
+.filters {
+   width: 25%;
+  padding: 20px;
+  border: 3px solid lightskyblue;
+  margin: 0;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
+  }

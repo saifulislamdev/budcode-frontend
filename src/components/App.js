@@ -6,6 +6,9 @@ import SignIn from './SignIn';
 import NotFound from './NotFound';
 import ProjectPage from './ProjectPage';
 import ProfilePage from './ProfilePage';
+import ProjectCreation from './ProjectCreation';
+import Feed from './Feed';
+import Search from './Search';
 import Home from "./Home";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserContextWrapper} from '../context/userContextWrapper';
@@ -30,6 +33,9 @@ function App() {
         </Route>
         <Route element={<WithNav/>}>
         <Route exact path="/projects/:id" element={<ProjectPage/>}/>
+        <Route exact path="/feed" element={<Feed/>}/>
+        <Route exact path="/projects/search" element={<Search/>}/>
+        <Route exact path="/projects/create" element={<ProjectCreation/>}/>
         <Route eaxct path ="/users/:id" element={<ProfilePage/>}/>
         </Route>
 
