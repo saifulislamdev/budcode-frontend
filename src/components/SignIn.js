@@ -1,6 +1,6 @@
 import React , {useContext, useState} from 'react';
 import { Link } from "react-router-dom";
-import picLogScreen3 from '../assets/picLogScreen3.png'
+import budcodeLogo from '../assets/budcodeLogo.png'
 import { Container, Form, Button, Row, Col} from 'react-bootstrap';
 import './SignIn.css';
 import { axiosInstance } from '../util/config';
@@ -70,7 +70,7 @@ export default function SignIn() {
         <Container id="main-container" className="d-grid h-100">
             <div className = "split left">
                 <div className="centered">
-                    <img className="info-Banner" src={picLogScreen3} alt="picLogScreen3"/>
+                    <img className="info-Banner" src={budcodeLogo} alt="budcodeLogo"/>
                 </div>
             </div>
         
@@ -92,7 +92,7 @@ export default function SignIn() {
                         </Form.Group>
   
                         <Form.Group className="mb-3" controlId="submit-form">
-                            <Button variant="outline-info" type="submit" to='/users/:id' onClick={handleClick}>
+                            <Button variant="outline-info" type="submit" onClick={handleClick}>
                                 Login
                             </Button> 
                         </Form.Group>
@@ -103,11 +103,11 @@ export default function SignIn() {
                             </Link>
                         </Form.Group>
  
-                        {error ? (
+                        {error && (
                                 <p style={{ color: 'red' }}>
-                                    {errorMessage}
+                                    {"Wrong username or password"}
                                 </p>
-                            ) : null}
+                            ) }
                     </Form>
                 </div>
             </div>    
