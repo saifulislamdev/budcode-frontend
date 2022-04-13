@@ -1,12 +1,13 @@
 import '../styles/App.css';
 import '../styles/index.css';
-import {BrowserRouter, Route, Routes, Router} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Router, useParams} from "react-router-dom";
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import NotFound from './NotFound';
 import ProjectPage from './ProjectPage';
 import ProfilePage from './ProfilePage';
 import ProjectCreation from './ProjectCreation';
+import Notification from './Notification';
 import Feed from './Feed';
 import Search from './Search';
 import Home from "./Home";
@@ -19,6 +20,7 @@ import WithoutNav from './WithoutNav';
 
 function App() {
 
+  
   return (
     
 <UserContextWrapper>
@@ -37,6 +39,7 @@ function App() {
         <Route exact path="/projects/search" element={<Search/>}/>
         <Route exact path="/projects/create" element={<ProjectCreation/>}/>
         <Route eaxct path ="/users/:id" element={<ProfilePage/>}/>
+        <Route exact path = "/notification" element={<Notification/>}/>
         </Route>
 
         
