@@ -5,7 +5,7 @@ import { BsCode, BsCodeSlash} from "react-icons/bs";
 import Button2 from "./Button2";
 import "./Button2.css";
 import "./Navbar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {UserContext} from '../util/context';
 import { Button} from 'react-bootstrap';
 
@@ -13,6 +13,8 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   let navigate = useNavigate(); 
   const {setAuthorization} = useContext(UserContext);
+
+  
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -65,7 +67,7 @@ const Navbar = () => {
             <a href="/projects/search">Search</a>
           </li>
           <li>
-            <a href="">Notification</a>
+            <a href="/notification">Notification</a>
           </li>
           <li className="nav-btn">
             <Button variant="outline-info" value= 'logout'  type="submit" onClick={handleClick}>
@@ -86,10 +88,10 @@ const Navbar = () => {
             <a href="/">Home</a>
           </li>
           <li>
-            <a href="">Profile</a>
+          <a href="#features">Features</a>
           </li>
           <li>
-            <a href="">Project</a>
+          <a href="#faq">FAQ</a>
           </li>
           <li>
             <a href="">Search</a>

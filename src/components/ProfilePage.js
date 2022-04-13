@@ -4,14 +4,21 @@ import { Container, Form, Button, Row, Col} from 'react-bootstrap';
 import Navbar from "./Navbar";
 import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from '../util/config';
+
+
 
 export default function ProfilePage() {
 
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const user = JSON.parse(window.localStorage.getItem('username'));
-    const authorization = JSON.parse(window.localStorage.getItem('token'));
+    const id = JSON.parse(window.localStorage.getItem('username'));
+    //const authorization = JSON.parse(window.localStorage.getItem('token'));
+    let { authorization } = useContext(UserContext);
+    if (!authorization) {
+        authorization = JSON.parse(window.localStorage.getItem('token'));
+    }
     //const [userInfo, setUserInfo] = useState({});
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -24,10 +31,11 @@ export default function ProfilePage() {
     const [skills, setSkills] = useState([]);
     let navigate = useNavigate(); 
     
-
-    useEffect(() => {
+   useEffect(() => {
+       if(id) {
+        navigate(`/users/${id}`);
         axiosInstance
-            .get(`/users/${user}` , {
+            .get(`/users/${id}` , {
                 headers: {authorization}, 
                 firstName: firstName,
                 lastName : lastName,
@@ -55,6 +63,7 @@ export default function ProfilePage() {
                 setSkills(response.data.skills);
 
                 console.log(response);
+                
                 console.log(response.data.firstName);
                 console.log(lastName);
             })
@@ -64,15 +73,18 @@ export default function ProfilePage() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             });
-        
-    }, []);
+       }
+}, [id]);
 
-    const editProfile = async (e) => {
+            
+  
+
+    /*const editProfile = async (e) => {
         e.preventDefault();
         setError(false); 
         setErrorMessage(''); 
             axiosInstance
-                .put(`/users/${user}` , {
+                .put(`/users/${id}` , {
                     headers: {authorization} , 
                     firstName: firstName,
                     lastName : lastName,
@@ -86,9 +98,21 @@ export default function ProfilePage() {
                 
                 })
                 .then((response) => {
+                    console.log(authorization);
+
+                    setFirstName(response.data.firstName);
+                    setLastName(response.data.lastName);
+                    setEmail(response.data.email);
+                    setGender(response.data.gender);
+                    setBio(response.data.bio);
+                    setOccupation(response.data.occupation);
+                    setLinks(response.data.links);
+                    setInterests(response.data.interests);
+                    setSkills(response.data.skills);
 
                     alert("Profile was edited successfully!");
-                    navigate(`/users/${user}`);
+
+                    navigate(`/users/${id}`);
                     console.log(response);
                     
             
@@ -100,7 +124,61 @@ export default function ProfilePage() {
                     setError(true);
                 });
          
+    };*/
+
+    const editProfile = async (e) => {
+        e.preventDefault();
+        setError(false); 
+        setErrorMessage('');
+        if(id) {
+            const putData = {
+                firstName: firstName,
+                lastName : lastName,
+                email : email,
+                gender : gender,
+                bio: bio,
+                occupation: occupation,
+                links: links,
+                interests: interests,
+                skills: skills
+            };
+            try {
+                const response = await axiosInstance.put(`/users/${id}`, putData, {
+                    headers: {'authorization': 'Bearer ' + authorization}
+                },
+                );
+                setFirstName(response.data.firstName);
+                setLastName(response.data.lastName);
+                setEmail(response.data.email);
+                setGender(response.data.gender);
+                setBio(response.data.bio);
+                setOccupation(response.data.occupation);
+                setLinks(response.data.links);
+                setInterests(response.data.interests);
+                setSkills(response.data.skills);
+
+                alert("Profile was edited successfully!");
+
+               //navigate(`/users/${id}`);
+               
+                console.log(response);
+                console.log(id);
+                navigate('/');
+              
+            }
+            catch(err) {
+                console.log(err);
+                    console.log(err.response);
+                    setErrorMessage(err.response.data.msg); 
+                    setError(true);
+            }
+        }
+        
+        
+            
+         
     };
+   
 
    
 
@@ -116,15 +194,15 @@ export default function ProfilePage() {
                 <Form>
                 <Form.Group>
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" defaultValue = {firstName} readOnly />
+                <Form.Control type="text" defaultValue = {firstName} onChange = {(e) => (setLastName(e.target.value))}/>
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" defaultValue = {lastName} readOnly />
+                <Form.Control type="text" defaultValue = {lastName} onChange = {(e) => (setLastName(e.target.value))}/>
                 {/*<Form.Label>Gender</Form.Label>
-                <Form.Control type="text" defaultValue = "Male" readOnly />*/}
+                <Form.Control type="text" defaultValue = "" readOnly />*/}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" defaultValue = {email} readOnly />
+                <Form.Control type="text" defaultValue = {email} onChange = {(e) => (setEmail(e.target.value))}/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Occupation</Form.Label>
@@ -168,14 +246,9 @@ export default function ProfilePage() {
             </Row>
 
             <div className = "edit-save-buttons">
-            <Form.Group className="mb-3" controlId="submitform">
-                        <Button variant="outline-info" type="submit" >
-                            Edit
-                        </Button> 
-                    </Form.Group>
                     <Form.Group className="mb-3" controlId="submitform">
                         <Button variant="outline-info" type="submit" onClick={editProfile} >
-                            Save
+                            Update
                         </Button> 
                     </Form.Group>
 
