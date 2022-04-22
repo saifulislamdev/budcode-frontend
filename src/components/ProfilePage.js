@@ -168,7 +168,7 @@ export default function ProfilePage() {
                     <Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Programming Languages</Form.Label>
-                    <Form.Control as="textarea" rows={3} defaultValue = {myList} onChange = {(e) => (setSkills(e.target.value))}/>
+                    <Form.Control as="textarea" rows={3} defaultValue = {skills} onChange = {(e) => (setSkills(e.target.value))}/>
                     </Form.Group>
                     </Form>
                 </Col>
