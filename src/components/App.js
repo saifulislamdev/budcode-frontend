@@ -38,7 +38,7 @@ function App() {
         <Route exact path="/feed" element={<Feed/>}/>
         <Route exact path="/projects/search" element={<Search/>}/>
         <Route exact path="/projects/create" element={<ProjectCreation/>}/>
-        <Route eaxct path ="/users/:id" element={<ProfilePage/>}/>
+        <Route exact path ="/users/:id" element={<ProfilePage/>}/>
         <Route exact path = "/notification" element={<Notification/>}/>
         </Route>
 

@@ -3,11 +3,18 @@ import { UserContext } from '../util/context';
 
 export const UserContextWrapper = ({children}) => {
     const [authorization, setAuthorization] = useState('');
+    const [username, setUsername] = useState('');
+
+// function getToken()
+//
 
     useEffect(() => {
         try {
             if (window.localStorage.getItem('authorization')) {
                 setAuthorization(JSON.parse(window.localStorage.getItem('authorization')));
+            }
+            if (window.localStorage.getItem('username')) {
+                setUsername(JSON.parse(window.localStorage.getItem('username')));
             }
             
           } catch (err) {
@@ -20,7 +27,7 @@ export const UserContextWrapper = ({children}) => {
 return (
     <UserContext.Provider
     value = {{
-        authorization, setAuthorization,
+        authorization, setAuthorization, username, setUsername
     }}>
         {children}
     </UserContext.Provider>

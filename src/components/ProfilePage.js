@@ -13,11 +13,11 @@ export default function ProfilePage() {
 
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const id = JSON.parse(window.localStorage.getItem('username'));
+    const username = JSON.parse(window.localStorage.getItem('username'));
     //const authorization = JSON.parse(window.localStorage.getItem('token'));
     let { authorization } = useContext(UserContext);
     if (!authorization) {
-        authorization = JSON.parse(window.localStorage.getItem('token'));
+        authorization = JSON.parse(window.localStorage.getItem('authorization'));
     }
     //const [userInfo, setUserInfo] = useState({});
     const [firstName, setFirstName] = useState('');
@@ -29,29 +29,19 @@ export default function ProfilePage() {
     const [links, setLinks] = useState([]);
     const [interests, setInterests] = useState([]);
     const [skills, setSkills] = useState([]);
+   const [canEdit, setCanEdit] = useState(null);
     let navigate = useNavigate(); 
-    
-   useEffect(() => {
-       if(id) {
-        navigate(`/users/${id}`);
+    const {id} = useParams();
+   
+    const getUser = async (id) => {
         axiosInstance
             .get(`/users/${id}` , {
-                headers: {authorization}, 
-                firstName: firstName,
-                lastName : lastName,
-                email : email,
-                gender : gender,
-                bio: bio,
-                occupation: occupation,
-                links: links,
-                interests: interests,
-                skills: skills
-
+                headers: {'authorization': 'Bearer ' + authorization}, 
             } 
-                )
+            )
             .then((response) => {
                 const {firstName, lastName, gender, email, bio, occupation, links, interests, skills} = response.data;
-              
+                setCanEdit(response.data.canEdit);
                 setFirstName(response.data.firstName);
                 setLastName(response.data.lastName);
                 setEmail(response.data.email);
@@ -63,9 +53,9 @@ export default function ProfilePage() {
                 setSkills(response.data.skills);
 
                 console.log(response);
-                
                 console.log(response.data.firstName);
                 console.log(lastName);
+                console.log(response.data.canEdit);
             })
             .catch((err) => {
                 console.log(err);
@@ -73,64 +63,30 @@ export default function ProfilePage() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             });
+       };
+    
+   useEffect(() => {
+    console.log(username);
+    console.log(authorization);
+       if (id && id != ':id' ){
+        navigate(`/users/${id}`);
+        console.log(id);
+        console.log(authorization);
+        getUser(id);
        }
-}, [id]);
+       else if(authorization && username) {
+        navigate(`/users/${username}`);
+        console.log(username);
+        console.log(authorization);
+        getUser(username);
+       }
+}, []);
 
-            
-  
-
-    /*const editProfile = async (e) => {
-        e.preventDefault();
-        setError(false); 
-        setErrorMessage(''); 
-            axiosInstance
-                .put(`/users/${id}` , {
-                    headers: {authorization} , 
-                    firstName: firstName,
-                    lastName : lastName,
-                    email : email,
-                    gender : gender,
-                    bio: bio,
-                    occupation: occupation,
-                    links: links,
-                    interests: interests,
-                    skills: skills
-                
-                })
-                .then((response) => {
-                    console.log(authorization);
-
-                    setFirstName(response.data.firstName);
-                    setLastName(response.data.lastName);
-                    setEmail(response.data.email);
-                    setGender(response.data.gender);
-                    setBio(response.data.bio);
-                    setOccupation(response.data.occupation);
-                    setLinks(response.data.links);
-                    setInterests(response.data.interests);
-                    setSkills(response.data.skills);
-
-                    alert("Profile was edited successfully!");
-
-                    navigate(`/users/${id}`);
-                    console.log(response);
-                    
-            
-                })
-                .catch((err) => {
-                    console.log(err);
-                    console.log(err.response);
-                    setErrorMessage(err.response.data.msg); 
-                    setError(true);
-                });
-         
-    };*/
-
-    const editProfile = async (e) => {
-        e.preventDefault();
-        setError(false); 
-        setErrorMessage('');
-        if(id) {
+   const editProfile = async (e) => {
+    e.preventDefault();
+    setError(false); 
+    console.log(canEdit);    
+    if(canEdit == true) {
             const putData = {
                 firstName: firstName,
                 lastName : lastName,
@@ -159,8 +115,7 @@ export default function ProfilePage() {
 
                 alert("Profile was edited successfully!");
 
-               //navigate(`/users/${id}`);
-               
+               //navigate(`/users/${id}`)
                 console.log(response);
                 console.log(id);
                 navigate('/');
@@ -172,25 +127,14 @@ export default function ProfilePage() {
                     setErrorMessage(err.response.data.msg); 
                     setError(true);
             }
-        }
-        
-        
-            
-         
+        }  
     };
    
-
-   
-
     return (
-
-        <section id="header">
-            
-        <Container>
-                   
+        <section id="header">          
+        <Container>               
           <Row>
-                <Col>
-                
+            <Col>           
                 <Form>
                 <Form.Group>
                 <Form.Label>First Name</Form.Label>
@@ -208,9 +152,9 @@ export default function ProfilePage() {
                 <Form.Label>Occupation</Form.Label>
                 <Form.Control type="text" defaultValue = {occupation} onChange = {(e) => (setOccupation(e.target.value))}/>
                 </Form.Group>
-                </Form>
-                       
+                </Form>       
                 </Col>
+
                 <Col>
                     <Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -219,11 +163,12 @@ export default function ProfilePage() {
                     </Form.Group>
                     </Form>
                 </Col>
+
                 <Col>
                     <Form>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Programming Languages</Form.Label>
-                    <Form.Control as="textarea" rows={3} defaultValue = {skills} onChange = {(e) => (setSkills(e.target.value))}/>
+                    <Form.Control as="textarea" rows={3} defaultValue = {myList} onChange = {(e) => (setSkills(e.target.value))}/>
                     </Form.Group>
                     </Form>
                 </Col>
@@ -244,46 +189,69 @@ export default function ProfilePage() {
                     </Form.Group>
                     </Form></Col>
             </Row>
-
-            <div className = "edit-save-buttons">
+                
+            {
+                canEdit && (
+                    <div className = "edit-save-buttons">
                     <Form.Group className="mb-3" controlId="submitform">
-                        <Button variant="outline-info" type="submit" onClick={editProfile} >
+                        <Button variant="outline-info" type="submit" onClick={editProfile}>
                             Update
                         </Button> 
                     </Form.Group>
 
             </div>
-                            
-        </Container>
-        
+                )
+            }                   
+        </Container>      
         </section>
-   
-
-
       );
 
 }
-/*<div className="MyInfo">
-                    <div className='Card'>
-                        <div className='upper-container'>
-                            <div className='image-container2'>
-                               
-                            </div>
-                        </div>
-                        <div className="lower-container">
-                            <h3>User Information</h3>
-                            <p>Full Name:</p>
-                            <p>Gender: </p>
-                            <p>Email: </p>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                
-                
-                 
 
-*/ 
+/*const editProfile = async (id) => { 
+        
+        console.log(authorization);
+            axiosInstance
+                .put(`/users/${id}` , {
+                    headers: {'authorization': 'Bearer ' + authorization},  
+                    firstName: firstName,
+                    lastName : lastName,
+                    email : email,
+                    gender : gender,
+                    bio: bio,
+                    occupation: occupation,
+                    links: links,
+                    interests: interests,
+                    skills: skills
+                
+                })
+                .then((response) => {
+
+                    setFirstName(response.data.firstName);
+                    setLastName(response.data.lastName);
+                    setEmail(response.data.email);
+                    setBio(response.data.bio);
+                    setOccupation(response.data.occupation);
+                    setLinks(response.data.links);
+                    setInterests(response.data.interests);
+                    setSkills(response.data.skills);
+
+                    alert("Profile was edited successfully!");
+
+                    //navigate(`/users/${id}`);
+                    console.log(response);
+                    
+            
+                })
+                .catch((err) => {
+                    console.log(err);
+                    console.log(err.response);
+                    setErrorMessage(err.response.data.msg); 
+                    setError(true);
+                });
+         
+    };*/
+
+
 
                 
