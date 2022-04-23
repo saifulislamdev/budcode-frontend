@@ -1,52 +1,11 @@
-.profilepic {
-	position: absolute;
-	left: 200px;
-  }
+.project-add-form {
+    display: flex;
+    gap: 24px;
+	padding: 16px;
+}
 
-  .Title {
-	position:absolute;
-	left: 550px;
-	top: 200px;
-	right: 700px;
-  }
-  
-  .Leader {
-	position:absolute;
-	left: 150px;
-	top: 300px;
-	right: 1450px;
-   
-  }
-  
-  .Member {
-	position: absolute;
-	left: 150px;
-	top: 500px;
-	right: 1450px;
-  }
-  
-  .Description {
-	position:absolute;
-	left: 550px;
-	top: 300px;
-	right: 700px;
-  }
-  
-  .Requirement {
-	position:absolute;
-	left: 1300px;
-	top: 300px;
-	right: 150px;
-  }
-  
-  .Submit {
-	position:absolute;
-	left: 900px;
-	top: 800px;
-  }
-
-  .home {
-	position:absolute;
-	left: 900px;
-	top: 850px;
-  }
+.name-description-container {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}

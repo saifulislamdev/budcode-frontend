@@ -5,7 +5,7 @@ import { BsCode, BsCodeSlash} from "react-icons/bs";
 import Button2 from "./Button2";
 import "./Button2.css";
 import "./Navbar.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {UserContext} from '../util/context';
 import { Button} from 'react-bootstrap';
 
@@ -52,22 +52,22 @@ const Navbar = () => {
           id={showMenu ? "nav-links-mobile" : "nav-links-mobile-hide"}
         >
           <li>
-            <a href="/">Home</a>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <a href="/users/:id">Profile</a>
+            <Link to="/users/:id">Profile</Link>
           </li>
           <li>
-            <a href="/feed">Feed</a>
+            <Link to="/feed">Feed</Link>
           </li>
           <li>
-            <a href="/projects/create">Create</a>
+            <Link to="/projects/create">Create</Link>
           </li>
           <li>
-            <a href="/projects/search">Search</a>
+            <Link to="/projects/search">Search</Link>
           </li>
           <li>
-            <a href="/notification">Notification</a>
+            <Link to="/notification">Notification</Link>
           </li>
           <li className="nav-btn">
             <Button variant="outline-info" value= 'logout'  type="submit" onClick={handleClick}>
