@@ -5,7 +5,7 @@ import { BsCode, BsCodeSlash} from "react-icons/bs";
 import Button2 from "./Button2";
 import "./Button2.css";
 import "./Navbar.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {UserContext} from '../util/context';
 import { Button} from 'react-bootstrap';
 
@@ -53,6 +53,7 @@ const Navbar = () => {
         >
           <li>
             <a href="/">Home</a>
+            {/* <Link to="/">Home</Link> */}
           </li>
           <li>
             <a href={`/users/${username}`}>Profile</a>

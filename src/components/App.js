@@ -16,11 +16,11 @@ import {UserContextWrapper} from '../context/userContextWrapper';
 import Navbar from './Navbar';
 import WithNav from './WithNav';
 import WithoutNav from './WithoutNav';
+import Rating from './Rating';
 
 
 function App() {
 
-  
   return (
     
 <UserContextWrapper>
@@ -32,6 +32,7 @@ function App() {
         <Route exact path="/404" element={<NotFound/>}/>
         <Route exact path="/auth/signup" element={<SignUp/>}/>
         <Route exact path="/auth/signin" element={<SignIn/>}/>
+        <Route exact path="/rating" element={<Rating/>}/>
         </Route>
         <Route element={<WithNav/>}>
         <Route exact path="/projects/:id" element={<ProjectPage/>}/>

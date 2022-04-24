@@ -1,4 +1,4 @@
-.postapp {
+/*.postapp {
     display: flex;
 }
 
@@ -12,10 +12,10 @@
     display: none;
   }
   
-  /* Hide scrollbar for IE, Edge and Firefox */
+ 
   .feed {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
 
 
@@ -50,3 +50,67 @@
     float: right;
     padding-bottom: 20px;
 }
+*/
+.sidebar {
+    display: flex;
+}
+.postapp {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+}
+
+.form-element {
+    padding: 8px 0;
+}
+
+.feed {
+    flex: 0.4;
+    min-width: fit-content;
+    overflow-y: scroll;
+}
+.feed::-webkit-scrollbar {
+    display: none;
+  }
+  
+ 
+  .feed {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+.writeForm{
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.writeFormGroup{
+    display: flex;
+    align-items: center;
+}
+
+.writeInput {
+    font-size: 20px;
+    border: none;
+    padding: 10px;
+    width: 50vw;
+}
+
+.writeInput:focus {
+    outline: none;
+}
+
+.writeText {
+    font-size: 20px;
+}
+
+.writeSubmit {
+  color: white;
+  background-color: blue;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  
+}
+
