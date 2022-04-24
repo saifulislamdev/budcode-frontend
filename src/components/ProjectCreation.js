@@ -56,7 +56,7 @@ export default function ProjectCreation() {
             <div className="project-add-form">
                 <div className="name-description-container" style={{ flex: 1 }}>
                     <div className="form-group">
-                        <label for="name">Name</label>
+                        <label for="name">Project Title</label>
                         <input className="form-control"
                             id="name"
                             type="text"
@@ -81,7 +81,7 @@ export default function ProjectCreation() {
                         style={{ height: '100%' }}
                         id="tags"
                         type="text"
-                        placeholder="Enter Project Tags"
+                        placeholder="Enter Project Tags and separate with commas. Ex:( Web Programming, Game Design )"
                         onChange={(e) => (setTags(e.target.value))}
                     />
                 </div>
@@ -91,7 +91,7 @@ export default function ProjectCreation() {
                         style={{ height: '100%' }}
                         id="skills"
                         type="text"
-                        placeholder="Enter Project Skills"
+                        placeholder="Enter Project Skills and separate with commas. Ex:( c++, javascript, react )"
                         onChange={(e) => (setSkills(e.target.value))}
                     />
                 </div>
@@ -101,7 +101,7 @@ export default function ProjectCreation() {
                         style={{ height: '100%' }}
                         id="links"
                         type="text"
-                        placeholder="Enter Project Links"
+                        placeholder="Enter Project Links related to the project if needed"
                         onChange={(e) => (setLinks(e.target.value))}
                     />
                 </div>
