@@ -30,7 +30,7 @@ const Navbar = () => {
     }
   };
 
-  
+  const username = JSON.parse(window.localStorage.getItem('username'));
 
   return (
 
@@ -55,7 +55,7 @@ const Navbar = () => {
             <a href="/">Home</a>
           </li>
           <li>
-            <a href="/users/:id">Profile</a>
+            <a href={`/users/${username}`}>Profile</a>
           </li>
           <li>
             <a href="/feed">Feed</a>
