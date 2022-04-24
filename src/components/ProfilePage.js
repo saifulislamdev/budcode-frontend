@@ -68,7 +68,9 @@ export default function ProfilePage() {
    useEffect(() => {
     console.log(username);
     console.log(authorization);
-       if (id && id != ':id' ){
+    getUser(id);  
+    /*
+    if (id && id != ':id' ){
         navigate(`/users/${id}`);
         console.log(id);
         console.log(authorization);
@@ -79,7 +81,7 @@ export default function ProfilePage() {
         console.log(username);
         console.log(authorization);
         getUser(username);
-       }
+       }*/
 }, []);
 
    const editProfile = async (e) => {
@@ -103,22 +105,13 @@ export default function ProfilePage() {
                     headers: {'authorization': 'Bearer ' + authorization}
                 },
                 );
-                setFirstName(response.data.firstName);
-                setLastName(response.data.lastName);
-                setEmail(response.data.email);
-                setGender(response.data.gender);
-                setBio(response.data.bio);
-                setOccupation(response.data.occupation);
-                setLinks(response.data.links);
-                setInterests(response.data.interests);
-                setSkills(response.data.skills);
-
+                
                 alert("Profile was edited successfully!");
 
                //navigate(`/users/${id}`)
                 console.log(response);
                 console.log(id);
-                navigate('/');
+
               
             }
             catch(err) {
@@ -138,7 +131,7 @@ export default function ProfilePage() {
                 <Form>
                 <Form.Group>
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" defaultValue = {firstName} onChange = {(e) => (setLastName(e.target.value))}/>
+                <Form.Control type="text" defaultValue = {firstName} onChange = {(e) => (setFirstName(e.target.value))}/>
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control type="text" defaultValue = {lastName} onChange = {(e) => (setLastName(e.target.value))}/>
                 {/*<Form.Label>Gender</Form.Label>
