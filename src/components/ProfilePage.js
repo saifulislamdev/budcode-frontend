@@ -6,6 +6,7 @@ import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from '../util/config';
+import Rating from './Rating';
 
 
 
@@ -202,7 +203,8 @@ export default function ProfilePage() {
             </div>
                 )
             }                   
-        </Container>      
+        </Container>     
+        {id !== username && <Rating firstName={firstName} userId={id} /> }
         </section>
       );
 
