@@ -52,56 +52,102 @@
 }
 */
 .sidebar {
-    display: flex;
+  display: flex;
 }
 .postapp {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.project-updates {
+  width: 360px;
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+}
+
+.update-card {
+  display: inherit;
+  padding: 16px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
+    0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  flex-direction: inherit;
+  gap: inherit;
+  width: 100%;
+}
+
+.update-card > div {
+  display: inherit;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.update-card .custom-card-header > h4 {
+  color: grey;
+}
+
+.update-card > div:nth-child(2) {
+  align-items: flex-start;
+}
+
+.update-card .custom-card-body {
+  flex-direction: column;
+}
+
+.update-card .custom-card-body > h4 {
+  overflow-wrap: anywhere;
+}
+
+.update-card .custom-card-footer {
+    justify-content: flex-end;
+  }
+
+.update-card .custom-card-body > h2 {
+  color: grey;
 }
 
 .form-element {
-    padding: 8px 0;
+  padding: 8px 0;
 }
 
 .feed {
-    flex: 0.4;
-    min-width: fit-content;
-    overflow-y: scroll;
+  flex: 0.4;
+  min-width: fit-content;
+  overflow-y: scroll;
 }
 .feed::-webkit-scrollbar {
-    display: none;
-  }
-  
- 
-  .feed {
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
-  }
-.writeForm{
-    position: relative;
-    padding-bottom: 20px;
+  display: none;
 }
 
-.writeFormGroup{
-    display: flex;
-    align-items: center;
+.feed {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.writeForm {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.writeFormGroup {
+  display: flex;
+  align-items: center;
 }
 
 .writeInput {
-    font-size: 20px;
-    border: none;
-    padding: 10px;
-    width: 50vw;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  width: 50vw;
 }
 
 .writeInput:focus {
-    outline: none;
+  outline: none;
 }
 
 .writeText {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .writeSubmit {
@@ -111,6 +157,4 @@
   border: none;
   border-radius: 10px;
   font-size: 15px;
-  
 }
-

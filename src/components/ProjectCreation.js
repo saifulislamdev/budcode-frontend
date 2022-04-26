@@ -39,9 +39,9 @@ export default function ProjectCreation() {
             .post('/projects', data, {
                 headers: { 'authorization': 'Bearer ' + authorization },
             })
-            .then(() => {
+            .then((res) => {
                 alert("Project has been created!");
-                // navigate(`/projects/${id}`);
+                // navigate(`/projects/${res.id}`);
             })
             .catch((err) => {
                 console.log(err);
@@ -56,7 +56,7 @@ export default function ProjectCreation() {
             <div className="project-add-form">
                 <div className="name-description-container" style={{ flex: 1 }}>
                     <div className="form-group">
-                        <label for="name">Project Title</label>
+                        <label htmlFor="name">Project Title</label>
                         <input className="form-control"
                             id="name"
                             type="text"
@@ -65,7 +65,7 @@ export default function ProjectCreation() {
                         />
                     </div>
                     <div className="form-group" style={{ flex: 1 }}>
-                        <label for="description">Description</label>
+                        <label htmlFor="description">Description</label>
                         <textarea className="form-control"
                             id="description"
                             style={{ height: '100%' }}
@@ -76,7 +76,7 @@ export default function ProjectCreation() {
                     </div>
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
-                    <label for="tags">Tags</label>
+                    <label htmlFor="tags">Tags</label>
                     <textarea className="form-control"
                         style={{ height: '100%' }}
                         id="tags"
@@ -86,7 +86,7 @@ export default function ProjectCreation() {
                     />
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
-                    <label for="skills">Skills</label>
+                    <label htmlFor="skills">Skills</label>
                     <textarea className="form-control"
                         style={{ height: '100%' }}
                         id="skills"
@@ -96,7 +96,7 @@ export default function ProjectCreation() {
                     />
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
-                    <label for="links">Links</label>
+                    <label htmlFor="links">Links</label>
                     <textarea className="form-control"
                         style={{ height: '100%' }}
                         id="links"
