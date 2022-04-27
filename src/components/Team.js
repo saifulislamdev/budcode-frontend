@@ -19,18 +19,20 @@ const Team = () => {
         </p>
         <IconContext.Provider value={{ size: "15" }}>
           <div className="team-icons">
+            
             <div className="team-icon">
-               <p>Saiful</p>
+              <p>Abdul Imtiaz</p>
             </div>
             <div className="team-icon">
-              <p>Abdul</p>
+              <p>Anvinh Troung</p>
             </div>
             <div className="team-icon">
-              <p>Tufayel</p>
+               <p>Saiful Islam</p>
             </div>
             <div className="team-icon">
-              <p>Anvinh</p>
+              <p>Tufayel Ahmed</p>
             </div>
+            
           </div>
         </IconContext.Provider>
       </div>

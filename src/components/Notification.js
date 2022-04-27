@@ -8,60 +8,140 @@ import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from '../util/config';
 
 export default function Notification() {
+    const [notification, setNotifications] = useState([]);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const {id} = useParams();
+    const [decision, setDecision] = useState(null);
 
+    let { authorization } = useContext(UserContext);
+    if (!authorization) {
+        authorization = JSON.parse(window.localStorage.getItem('authorization'));
+    }
+
+    const getNotifications = async (id) => {
+        axiosInstance
+            .get(`/notifications/user/${id}` , {
+                headers: {'authorization': 'Bearer ' + authorization,
+                'Content-Type': 'application/json'}, 
+            } 
+            )
+            .then((response) => {
+                
+                console.log(response);
+                
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+    };
+
+    useEffect(() => {
+        getNotifications(id);
+        console.log(authorization);
+        console.log(allNotifications);
+    }, []);
+
+    const AcceptButton = async (id) => {
+        axiosInstance
+            .delete(`/projects/request/${id}` , {
+                headers: {'authorization': 'Bearer ' + authorization,
+                'Content-Type': 'application/json'}, 
+                decision: decision,
+            } 
+            )
+            .then((response) => {
+                setDecision(true);
+                console.log(response);
+                alert("User was accepted!");
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+    };
+    const DeclineButton = async (id) => {
+        axiosInstance
+            .delete(`/projects/request/${id}` , {
+                headers: {'authorization': 'Bearer ' + authorization,
+                'Content-Type': 'application/json'}, 
+                decision: decision,
+            } 
+            )
+            .then((response) => {
+                setDecision(false);
+                console.log(response);
+                alert("User was declined!");
+                
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+    };
+   
+    const [allNotifications, setAllNotifications] = useState([1, 2, 3, 4, 5]);
+   
+    const removeItem = (index) => {
+        setAllNotifications([
+                   ...allNotifications.slice(0, index),
+                   ...allNotifications.slice(index + 1)
+                 ]);
+    }
 
 
     return (
-
-        <section id="header">
-            
+        <section id="header">  
         <Container>
                    
           <Row>
                 <Col>
                 <h1 className="text-info">Notifications</h1> 
-                <div className="alert alert-info" role="alert">
-                This is a info alert—check it out!
-                </div>
-                <div class="alert alert-danger" role="alert">
-                This is a danger alert—check it out!
-                </div>   
-                </Col>
-                <Col>
-                </Col>
-                <Col>
-                <h1 className="p-3 mb-2 bg-info text-white">Member Approval</h1>
-                <div>
+             
+                {allNotifications?.map((allNotification) => {
                 
+                   return(
+                        
+                    <div>
+                    <div className="alert alert-info" role="alert">
+                        {allNotification}      
+                    </div> 
+                    
+                    <Button variant="outline-info" type="submit" onClick={removeItem} >
+                    Remove
+                </Button>
+                </div>
+                    );
+                }
+                
+                )} 
+                
+                </Col>
+                <Col>
+                </Col>
+                <Col>
+                <h1 className="text-info">Member Approval</h1>
+                <div>
                     <Form.Group className="mb-3" controlId="submitform">
                         <Form.Control type="text" defaultValue = "Name" readOnly />
-                        <Button variant="outline-info" type="submit"  >
+                        <Button variant="outline-info" type="submit" onClick={AcceptButton} >
                             Accept
                         </Button> {'    '}
-                        <Button variant="outline-info" type="submit"  >
+                        <Button variant="outline-info" type="submit" onClick={DeclineButton} >
                             Decline
                         </Button>
                     </Form.Group>
-
-
                 </div>
-                <div className = "edit-save-buttons">
-                    
-
-            </div>
-                </Col>
-                
-            </Row>
-
-           
-
-           
-                            
+                </Col>             
+            </Row>                           
         </Container>
-        
         </section>
-   
-
-
       );
 }

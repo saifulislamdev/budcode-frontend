@@ -52,14 +52,13 @@ const Navbar = () => {
           id={showMenu ? "nav-links-mobile" : "nav-links-mobile-hide"}
         >
           <li>
-            <a href="/">Home</a>
-            {/* <Link to="/">Home</Link> */}
+            <a href="/">Home</a>          
           </li>
           <li>
             <a href={`/users/${username}`}>Profile</a>
           </li>
-          <li>
-            <a href="/feed">Feed</a>
+          <li> 
+           <a href="/feed">Feed</a>
           </li>
           <li>
             <a href="/projects/create">Create</a>
@@ -68,7 +67,7 @@ const Navbar = () => {
             <a href="/projects/search">Search</a>
           </li>
           <li>
-            <a href="/notification">Notification</a>
+            <a href={`/notification/user/${username}`}>Notification</a>
           </li>
           <li className="nav-btn">
             <Button variant="outline-info" value= 'logout'  type="submit" onClick={handleClick}>
