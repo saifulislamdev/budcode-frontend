@@ -82,8 +82,8 @@ export default function ProjectPage() {
                 name: name,
                 description: description,
                 status: status,
-                skills: skills.split(', '),
-                tags: tags.split(', '),
+                skills: skills,
+                tags: tags,
                 //members: members,
             };
             try {
@@ -151,6 +151,7 @@ export default function ProjectPage() {
               
     };
 
+    
     /*try {
                 const response = await axiosInstance.post(`/projects/${id}/follow`,  {
                     headers: {'authorization': 'Bearer ' + authorization}
@@ -165,8 +166,7 @@ export default function ProjectPage() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             } */
-    //POST /projects/:id/follow
-    //POST /projects/:id/requests
+ 
 
 
   
