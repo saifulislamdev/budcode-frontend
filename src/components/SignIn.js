@@ -34,7 +34,7 @@ export default function SignIn() {
         });
 
         if (isValid) {
-            axiosInstance
+            await axiosInstance
                 .post('/auth/signin', {
                     username: username,
                     password: password,

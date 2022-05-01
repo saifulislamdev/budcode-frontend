@@ -20,7 +20,7 @@ export default function Notification() {
     }
 
     const getNotifications = async (id) => {
-        axiosInstance
+        await axiosInstance
             .get(`/notifications/user/${id}` , {
                 headers: {'authorization': 'Bearer ' + authorization,
                 'Content-Type': 'application/json'}, 
@@ -39,14 +39,35 @@ export default function Notification() {
             });
     };
 
+    const getProjects = async(id) => {
+        await axiosInstance
+            .get('/users/createdProjects',{
+                headers: {'authorization': 'Bearer ' + authorization}, 
+            }
+            )
+            .then((response) => {
+                
+                console.log(response);
+                
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+    };
+
     useEffect(() => {
         getNotifications(id);
+        getProjects(id);
         console.log(authorization);
         console.log(allNotifications);
+        
     }, []);
 
     const AcceptButton = async (id) => {
-        axiosInstance
+        await axiosInstance
             .delete(`/projects/request/${id}` , {
                 headers: {'authorization': 'Bearer ' + authorization,
                 'Content-Type': 'application/json'}, 
@@ -66,7 +87,7 @@ export default function Notification() {
             });
     };
     const DeclineButton = async (id) => {
-        axiosInstance
+        await axiosInstance
             .delete(`/projects/request/${id}` , {
                 headers: {'authorization': 'Bearer ' + authorization,
                 'Content-Type': 'application/json'}, 
