@@ -50,7 +50,7 @@ export default function SignUp() {
         });
 
         if (isValid) {
-            axiosInstance
+            await axiosInstance
                 .post('/auth/signup', {
                     firstName: firstName,
                     lastName: lastName,

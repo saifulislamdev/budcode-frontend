@@ -22,14 +22,14 @@ export default function ProfilePage() {
     const [bio, setBio] = useState('');
     const [occupation, setOccupation] = useState('');
     const [links, setLinks] = useState([]);
-    const [interests, setInterests] = useState([]);
-    const [skills, setSkills] = useState([]);
-   const [canEdit, setCanEdit] = useState(null);
+    const [interests, setInterests] = useState('');
+    const [skills, setSkills] = useState('');
+    const [canEdit, setCanEdit] = useState(null);
     let navigate = useNavigate(); 
     const {id} = useParams();
    
     const getUser = async (id) => {
-        axiosInstance
+        await axiosInstance
             .get(`/users/${id}` , {
                 headers: {'authorization': 'Bearer ' + authorization}, 
             } 
@@ -43,8 +43,8 @@ export default function ProfilePage() {
                 setBio(response.data.bio);
                 setOccupation(response.data.occupation);
                 setLinks(response.data.links);
-                setInterests(response.data.interests);               
-                setSkills(response.data.skills);
+                setInterests(response.data.interests.toString());               
+                setSkills(response.data.skills.toString());
                 console.log(response);
                 console.log(response.data.firstName);
                 console.log(lastName);
@@ -76,8 +76,8 @@ export default function ProfilePage() {
                 bio: bio,
                 occupation: occupation,
                 links: links,
-                interests: interests,
-                skills: skills,
+                interests: interests.split(','),
+                skills: skills.split(','),
             };
             try {
                 const response = await axiosInstance.put(`/users/${id}`, putData, {
@@ -97,6 +97,14 @@ export default function ProfilePage() {
             }
         }  
     };
+
+    //for();
+   
+  
+    const skills2 = ["hello", "hello"];
+    
+
+    
    
     return (
         <section id="header">          
@@ -136,7 +144,7 @@ export default function ProfilePage() {
                         <Col>
                             <Form>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Programming Languages</Form.Label>
+                            <Form.Label>Skills</Form.Label>
                             <Form.Control as="textarea" rows={3} defaultValue = {skills} readOnly/>
                             </Form.Group>
                             </Form>
