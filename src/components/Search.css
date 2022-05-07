@@ -81,6 +81,20 @@
   justify-content: space-between;
 }
 
+.search-projects .project-card .custom-card-header .title-container {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.search-projects .project-card .custom-card-header .title-container span {
+  padding: 4px;
+  background-color: #28a745;
+  color: #FFF;
+  font-size: 0.725rem;
+  border-radius: 4px;
+}
+
 .search-projects .project-card .custom-card-body {
   display: flex;
 }
