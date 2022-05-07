@@ -1,10 +1,11 @@
 import React from 'react';
 import './ProjectPage.css';
-import {useContext, useEffect, useState} from 'react';
-import { Container, Form, Button, Row, Col} from 'react-bootstrap';
+import {useContext, useEffect, useState, useRef} from 'react';
+import { Container, Form, Button, Row, Col, Popover, OverlayTrigger, Overlay, Tooltip} from 'react-bootstrap';
 import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
+import { join } from 'lodash';
 
 export default function ProjectPage() {
 
@@ -16,12 +17,12 @@ export default function ProjectPage() {
     const [error, setError] = useState(false);
     const [canUserEdit, setCanUserEdit] = useState(null);
     const [canUserFollow, setCanUserFollow] = useState(null);
-    const [canUserRequest, setCanUserRequest] = useState();
-    const [hasUserRequested, setHasUserRequested] = useState();
-    const [isUserFollowing, setIsUserFollowing] = useState();
-    const [isUserAMember, setIsUserAMember] = useState();
-    const [isValidUser, setIsValidUser] = useState();
-    //const [members, setMembers] = useState([{username:'',joinedAt:''}]);
+    const [canUserRequest, setCanUserRequest] = useState(null);
+    const [hasUserRequested, setHasUserRequested] = useState(null);
+    const [isUserFollowing, setIsUserFollowing] = useState(null);
+    const [isUserAMember, setIsUserAMember] = useState(null);
+    const [isValidUser, setIsValidUser] = useState(null);
+    const [members, setMembers] = useState([]);
     const [status, setStatus] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const {id} = useParams();
@@ -52,7 +53,7 @@ export default function ProjectPage() {
                 setIsUserFollowing(response.data.isUserFollowing);
                 setIsUserAMember(response.data.isUserAMember);
                 setIsValidUser(response.data.isValidUser);
-                //setMembers(response.data.members);
+                setMembers(response.data.members);
                 setStatus(response.data.status);
                 console.log(response);
                 console.log(response.data.canUserFollow);
@@ -63,13 +64,17 @@ export default function ProjectPage() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             });
+            console.log(members);
     };
+
 
     useEffect(() => {
         getProject(id);
         console.log(id);
         console.log(authorization);
-        
+        console.log(skills);
+
+
     }, []);
 
     const editProject = async (e) => {
@@ -84,7 +89,8 @@ export default function ProjectPage() {
                 status: status,
                 skills: skills.split(','),
                 tags: tags.split(','),
-                //members: members.username,
+                members: members,
+             
             };
             try {
                 const response = await axiosInstance.put(`/projects/${id}`, putData, {
@@ -135,8 +141,7 @@ export default function ProjectPage() {
                 headers: {'authorization': 'Bearer ' + authorization}, 
             }
             )
-            .then((response) => {
-               
+            .then((response) => {            
                 console.log(response);
                 alert("You have successfully followed this project!");
             })
@@ -146,12 +151,18 @@ export default function ProjectPage() {
                 console.log(authorization);
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
-            });    
-        
-              
+            });       
     };
 
+    const handleChnage = (e, index) => {
+        const clonedData = [...members];
+        clonedData[index][e.target.name] = e.target.value;
+
+        setMembers(clonedData);
+    }
     
+    const [show, setShow] = useState(false);
+  const target = useRef(null);
     return (
         <section id="header">
             <Container>
@@ -180,7 +191,15 @@ export default function ProjectPage() {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Members</Form.Label>
-                            <Form.Control as="textarea" rows={3} /*defaultValue = {members.username} onChange = {(e) => (setMembers(e.target.value))}*//>
+                            {members?.map((member, index) => {              
+                        return(
+                            <div>
+                            <Form.Label>Name:</Form.Label><Form.Control type="text" key={index} defaultValue = {member.username}  onChange = {handleChnage}/>
+                            <Form.Label>Date Joined:</Form.Label><Form.Control type="text" defaultValue = {member.joinedAt.substring(0,10)} readOnly/>
+                            </div>
+                                
+                        );
+                        })} 
                             </Form.Group>
                             </Form>
                         </Col>
@@ -237,7 +256,15 @@ export default function ProjectPage() {
                             <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
                             <Button variant="outline-info" type="submit" onClick={requestJoinProject}>Interested</Button>{' '}
                             </Form.Group>
-                            )}           
+                            )}
+                            {!isValidUser && (
+                            <Form.Group>
+                            <Button variant="secondary" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
+                            <Button variant="secondary" type="submit" onClick={requestJoinProject} disabled>Interested</Button>{' '}
+                            </Form.Group>
+
+                            
+                            )}             
                         </Col>
                     </Row>
                     <Row>
@@ -249,7 +276,11 @@ export default function ProjectPage() {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Members</Form.Label>
-                            <Form.Control as="textarea" rows={3} defaultValue = {''} readOnly/>
+                            {members?.map((member, index) => {              
+                        return(
+                            <Form.Control type="text" key={index} defaultValue = {member.username + "  " +  member.joinedAt.substring(0,10)}  readOnly/>   
+                        );
+                        })} 
                             </Form.Group>
                             </Form>
                         </Col>

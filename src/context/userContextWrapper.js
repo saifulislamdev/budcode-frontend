@@ -6,8 +6,6 @@ export const UserContextWrapper = ({ children }) => {
   const [username, setUsername] = useState('');
   const [updatesList, setUpdatesList] = useState([]);
 
-  // function getToken()
-  //
 
   useEffect(() => {
     try {
