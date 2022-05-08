@@ -22,7 +22,8 @@ export default function ProjectPage() {
     const [isUserFollowing, setIsUserFollowing] = useState(null);
     const [isUserAMember, setIsUserAMember] = useState(null);
     const [isValidUser, setIsValidUser] = useState(null);
-    const [members, setMembers] = useState([]);
+    const [members, setMembers] = useState(''); // array that is converted to a string
+    const [membersWithJoinDates, setMembersWithJoinDates] = useState([]);
     const [status, setStatus] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const {id} = useParams();
@@ -53,7 +54,19 @@ export default function ProjectPage() {
                 setIsUserFollowing(response.data.isUserFollowing);
                 setIsUserAMember(response.data.isUserAMember);
                 setIsValidUser(response.data.isValidUser);
-                setMembers(response.data.members);
+                setMembersWithJoinDates(response.data.members);
+
+                // take only usernames of project members (no join date) and put it in an array 
+                // the array is then converted to a string
+                setMembers(
+                    response.data.members.map(
+                        // project member's username and their join date in an obj
+                        (usernameAndJoinDate) => 
+                            // take only the project member's username
+                            usernameAndJoinDate.username
+                        
+                    ).toString()
+                );
                 setStatus(response.data.status);
                 console.log(response);
                 console.log(response.data.canUserFollow);
@@ -64,7 +77,6 @@ export default function ProjectPage() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             });
-            console.log(members);
     };
 
 
@@ -82,20 +94,19 @@ export default function ProjectPage() {
         setError(false);  
         console.log(canUserEdit);
         console.log(authorization);
-   
+        console.log('members when splitting', members.split(','));
             const putData = {
                 name: name,
                 description: description,
                 status: status,
                 skills: skills.split(','),
                 tags: tags.split(','),
-                members: members,
+                members: members.split(','),
              
             };
             try {
                 const response = await axiosInstance.put(`/projects/${id}`, putData, {
-                    headers: {'authorization': 'Bearer ' + authorization,
-                        'Content-Type': 'application/json'},
+                    headers: {'authorization': 'Bearer ' + authorization},
                 },
                 );       
                 alert("Project was updated successfully!");
@@ -116,8 +127,7 @@ export default function ProjectPage() {
         setError(false);  
             try {
                 const response = await axiosInstance.post(`/projects/${id}/requests`, {}, {
-                    headers: {'authorization': 'Bearer ' + authorization,
-                        'Content-Type': 'application/json'},
+                    headers: {'authorization': 'Bearer ' + authorization},
                 },
                 );       
                 alert("You have successfully requested to join!");
@@ -154,15 +164,19 @@ export default function ProjectPage() {
             });       
     };
 
-    const handleChnage = (e, index) => {
+    /*const handleChange = (e, index) => {
+        console.log('hello');
         const clonedData = [...members];
         clonedData[index][e.target.name] = e.target.value;
-
+        
         setMembers(clonedData);
-    }
+    }*/
+    
     
     const [show, setShow] = useState(false);
   const target = useRef(null);
+  console.log('members', members);
+  console.log('membersWithJoinDates', membersWithJoinDates);
     return (
         <section id="header">
             <Container>
@@ -191,15 +205,7 @@ export default function ProjectPage() {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Members</Form.Label>
-                            {members?.map((member, index) => {              
-                        return(
-                            <div>
-                            <Form.Label>Name:</Form.Label><Form.Control type="text" key={index} defaultValue = {member.username}  onChange = {handleChnage}/>
-                            <Form.Label>Date Joined:</Form.Label><Form.Control type="text" defaultValue = {member.joinedAt.substring(0,10)} readOnly/>
-                            </div>
-                                
-                        );
-                        })} 
+                            <Form.Control as="textarea" rows={membersWithJoinDates.length} defaultValue = {members} onChange = {(e) => (setMembers(e.target.value))}/>
                             </Form.Group>
                             </Form>
                         </Col>
@@ -236,6 +242,8 @@ export default function ProjectPage() {
                             ) : null}            
                     </div>
                 )}
+                
+
 
                 {!canUserEdit && (
                     <div>
@@ -275,12 +283,12 @@ export default function ProjectPage() {
                             <Form.Control as="textarea" rows={3} defaultValue = {description} readOnly/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Project Members</Form.Label>
-                            {members?.map((member, index) => {              
+                            {/* <Form.Label>Project Members</Form.Label>
+                           {membersWithJoinDates?.map((member, index) => {              
                         return(
                             <Form.Control type="text" key={index} defaultValue = {member.username + "  " +  member.joinedAt.substring(0,10)}  readOnly/>   
                         );
-                        })} 
+                        })} */}
                             </Form.Group>
                             </Form>
                         </Col>
@@ -316,3 +324,5 @@ export default function ProjectPage() {
         </section>         
     );
 }
+
+/*<Form.Label>Date Joined:</Form.Label><Form.Control type="text" defaultValue = {member.joinedAt.substring(0,10)} readOnly/> */

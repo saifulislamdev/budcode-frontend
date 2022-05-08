@@ -6,6 +6,7 @@ import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from '../util/config';
+import { boolean } from 'yup';
 
 export default function Notification() {
     const [notifications, setNotifications] = useState([]);
@@ -14,7 +15,7 @@ export default function Notification() {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const {id} = useParams();
-    const [decision, setDecision] = useState(null);
+    let decision = false;
 
     let { authorization } = useContext(UserContext);
     if (!authorization) {
@@ -26,8 +27,7 @@ export default function Notification() {
         
         await axiosInstance
             .get(`/notifications/user/${id}` , {
-                headers: {'authorization': 'Bearer ' + authorization,
-                'Content-Type': 'application/json'}, 
+                headers: {'authorization': 'Bearer ' + authorization}, 
             } 
             )
             .then((response) => {
@@ -49,13 +49,9 @@ export default function Notification() {
                 headers: {'authorization': 'Bearer ' + authorization}, 
             }
             )
-            .then((response) => {
-
-              
+            .then((response) => {            
                 setProjects(response.data.projects);
                 console.log(response);
-                
-                
             })
             .catch((err) => {
                 console.log(err);
@@ -67,9 +63,10 @@ export default function Notification() {
             
     };
 
+
     const getProjectRequest = async(id) => {
         await axiosInstance
-            .get(`/projects/${13}/requests`,{
+            .get(`/projects/${id}/requests`,{
                 headers: {'authorization': 'Bearer ' + authorization}, 
             }
             )
@@ -97,17 +94,32 @@ export default function Notification() {
 
 
 
-    const AcceptButton = async (id) => {
-        console.log(id);
+    const AcceptButton = async (id) => {  
         await axiosInstance
-            .delete(`/projects/request/${id}` , {
-                headers: {'authorization': 'Bearer ' + authorization,
-                'Content-Type': 'application/json'}, 
-                decision: decision,
+            .delete(`/projects/requests/${id}` , {headers: {'authorization': 'Bearer ' + authorization}, data: {decision: true}
             } 
             )
             .then((response) => {
-                setDecision(true);
+                
+                console.log(response);
+                alert("User was accepted!");
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });        
+    };
+
+    
+    const DeclineButton = async (id) => {
+        await axiosInstance
+            .delete(`/projects/requests/${id}` , {headers: {'authorization': 'Bearer ' + authorization}, data: {decision: false}
+            } 
+            )
+            .then((response) => {
+                
                 console.log(response);
                 alert("User was accepted!");
             })
@@ -118,29 +130,14 @@ export default function Notification() {
                 setError(true);
             });
     };
-    const DeclineButton = async (id) => {
-        await axiosInstance
-            .delete(`/projects/request/${id}` , {
-                headers: {'authorization': 'Bearer ' + authorization,
-                'Content-Type': 'application/json'}, 
-                decision: decision,
-            } 
-            )
-            .then((response) => {
-                setDecision(false);
-                console.log(response);
-                alert("User was declined!");
-                
-            })
-            .catch((err) => {
-                console.log(err);
-                console.log(err.response);
-                setErrorMessage(err.response.data.msg); 
-                setError(true);
-            });
-    };
+/*
+    let allRequest = [];
    
-
+    for(let i=0; i < projects.length;i++){
+        allRequest.push(getProjectRequest(projects[i].id));
+    }
+    console.log(allRequest);
+*/
     return (
         <section id="header">  
         <Container>
@@ -179,45 +176,37 @@ export default function Notification() {
                 <Col>
                 <h1 className="text-info">Member Approval</h1>
                 
-        <div className='form-group form-element'>
-          <select
-            name='project'
-            onChange={getProjectRequest}
-            className='form-select'
-          >
-            {projects?.map((project, index) => (
-              <option key={`project-option-${index}`} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
+     
         
-        <div className='form-group form-element'>
-       
+        <div>   
 
-       
+      
+        
+            
                 {memberRequests?.map((memberRequest) => {
                 
                    return(
                         
                     <div>
-                     <Form.Group className="mb-3" controlId="submitform">
-                        <Form.Control type="text" defaultValue = {memberRequest.username} readOnly />
-                        <Button variant="outline-info" type="submit" onClick={() => AcceptButton(memberRequest.id)} >
-                            Accept
-                        </Button> {'    '}
-                        <Button variant="outline-info" type="submit" onClick={() => DeclineButton(id)} >
-                            Decline
-                        </Button>
-                    </Form.Group>
-                    
-                    
-                </div>
+                        <Form.Group className="mb-3" controlId="submitform">
+                            <Form.Control type="text" defaultValue = {memberRequest.username} readOnly />
+                            <Button variant="outline-info" type="submit" onClick={() => AcceptButton(memberRequest.id)} >
+                                Accept
+                            </Button> {'    '}
+                            <Button variant="outline-info" type="submit" onClick={() => DeclineButton(memberRequest.id)} >
+                                Decline
+                            </Button>
+                        </Form.Group>
+                    </div>
                     );
                 }
                 
             )} 
+
+       
+        
+
+   
             {/*
             {memberRequests?.map((memberRequest, index) => (
               <option key={`project-option-${index}`} value={memberRequest.id}>
@@ -260,3 +249,17 @@ export default function Notification() {
         </section>
       );
 }
+
+/* <div className='form-group form-element'>
+          <select
+            name='project'
+            onChange={getProjectRequest}
+            className='form-select'
+          >
+            {projects?.map((project, index) => (
+              <option key={`project-option-${index}`} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>*/
