@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { uniq, isEmpty } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
 import './Search.css';
 import { axiosInstance } from '../util/config';
+import { UserContext } from '../util/context';
+import { Button } from 'react-bootstrap';
 
 export default function Search() {
   const [projects, setProjects] = useState([]);
@@ -11,12 +13,15 @@ export default function Search() {
   const [skills, setSkills] = useState([]);
   const [queryParams, setQueryParams] = useState({ skills: [], tags: [] });
   const [searchQuery, setSearchQuery] = useState('');
+  const [userSkills, setUserSkills] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const { username } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   const getProjects = () => {
     axiosInstance.get('/projects').then((res) => {
-      const data = res.data/* .slice(69, -1) */;
+      const data = res.data; /* .slice(69, -1) */
       const uniqueTags = uniq(
         data.flatMap((item) => item.tags.map((tag) => tag.trim()))
       );
@@ -43,11 +48,13 @@ export default function Search() {
     );
     const tagsFilter = Object.keys(tags).filter((tag) => tags[tag] === true);
 
-    const url = `/projects?skill[]=${encodeURIComponent(
-      skillsFilter
-    )}&tag[]=${encodeURIComponent(tagsFilter)}&search=${encodeURIComponent(
-      searchQuery
-    )}`;
+    const url = `${
+      !!skills?.length ? '/projects?skill[]=' : ''
+    }${encodeURIComponent(skillsFilter)}${
+      !!tags?.length ? '&tag[]=' : ''
+    }${encodeURIComponent(tagsFilter)}${
+      searchQuery ? '&search=' : ''
+    }${encodeURIComponent(searchQuery)}`;
     axiosInstance.get(url).then((res) => {
       setProjects(res.data);
     });
@@ -57,6 +64,7 @@ export default function Search() {
     navigate(`/projects/${projectId}`);
   };
 
+
   useEffect(() => {
     getProjects();
   }, []);
@@ -65,6 +73,17 @@ export default function Search() {
     const { skills, tags } = queryParams;
     (!isEmpty(skills) || !isEmpty(tags)) && handleSearch();
   }, [queryParams]);
+
+  useEffect(() => {
+    username &&
+      axiosInstance.get(`/users/${username}`).then((res) => {
+        setUserSkills(res?.data?.skills);
+      });
+  }, [username]);
+
+  useEffect(() => {
+    console.log('skills:', { tags, skills, userSkills });
+  }, [skills, tags, userSkills]);
 
   return (
     <div className='search-page'>
@@ -132,7 +151,12 @@ export default function Search() {
                   onClick={() => navigateToProject(id)}
                 >
                   <div className='custom-card-header'>
-                    <h3>{name}</h3>
+                    <div className='title-container'>
+                      <h3>{name}</h3>
+                      {userSkills?.find((skill) => skills.includes(skill)) && (
+                        <span>Suggested</span>
+                      )}
+                    </div>
                     <h5>{creator}</h5>
                   </div>
                   <div className='custom-card-body'>
@@ -153,6 +177,7 @@ export default function Search() {
             })}
           </div>
         )}
+        
       </div>
     </div>
   );

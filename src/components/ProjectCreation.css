@@ -24,7 +24,7 @@
 }
 
 .project-add-form label {
-	font-size: 18px;
+  font-size: 18px;
 }
 
 .project-add-form textarea {
@@ -40,4 +40,27 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.links-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 8px 16px;
+  border: 1px solid lightblue;
+}
+
+.links-form-group label {
+  font-weight: bold;
+}
+
+
+.links-form-group .remove-link-btn {
+	width: 100%;
+}
+
+.links-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 10vw;
 }

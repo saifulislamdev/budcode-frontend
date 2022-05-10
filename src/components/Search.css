@@ -13,6 +13,8 @@
 
 .skill-tag-card {
   display: inherit;
+  max-height: 300px;
+  overflow-y: scroll;
   padding: 16px;
   gap: 16px;
   flex-direction: inherit;
@@ -72,7 +74,7 @@
 
 .project-card:hover {
   cursor: pointer;
-  background-color: #E1F5FE;
+  background-color: #e1f5fe;
   transition: ease-in 200ms;
 }
 
@@ -90,7 +92,7 @@
 .search-projects .project-card .custom-card-header .title-container span {
   padding: 4px;
   background-color: #28a745;
-  color: #FFF;
+  color: #fff;
   font-size: 0.725rem;
   border-radius: 4px;
 }

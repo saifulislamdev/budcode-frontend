@@ -1,9 +1,77 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import { Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Modal, Button, Form } from 'react-bootstrap';
 import './ProjectCreation.css';
 import { axiosInstance } from '../util/config';
 import { UserContext } from '../util/context';
+import { v4 as uuid } from 'uuid';
+
+function LinksModal({
+  show,
+  onHide,
+  links,
+  handleLinksChange,
+  handleRemoveLink,
+  handleAddLink,
+}) {
+  return (
+    <Modal show={show} onHide={onHide} size='md' centered>
+      <Modal.Header>
+        <Modal.Title id='contained-modal-title-vcenter'>
+          Add/Remove Links for the Project
+        </Modal.Title>
+        <Button className='btn btn-primary' onClick={handleAddLink}>
+          Add
+        </Button>
+      </Modal.Header>
+      <Modal.Body>
+        {links?.map((link) => {
+          console.log('link', link);
+          return (
+            <Form.Group
+              key={`link-details-${link?.id}`}
+              className='links-form-group'
+            >
+              <div>
+                <Button
+                  className='btn btn-danger remove-link-btn'
+                  onClick={() => handleRemoveLink(link?.id)}
+                >
+                  - Remove Link
+                </Button>
+              </div>
+
+              <div>
+                <Form.Label>Link Type</Form.Label>
+                <Form.Control
+                  id={link?.id}
+                  name='type'
+                  onChange={handleLinksChange}
+                  type='text'
+                  placeholder='Link Type'
+                />
+              </div>
+              <div>
+                <Form.Label>Link Type</Form.Label>
+                <Form.Control
+                  id={link?.id}
+                  name='link'
+                  onChange={handleLinksChange}
+                  type='text'
+                  placeholder='Link URL'
+                />
+              </div>
+            </Form.Group>
+          );
+        })}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
 export default function ProjectCreation() {
   const [name, setName] = useState('');
@@ -13,15 +81,53 @@ export default function ProjectCreation() {
   const [links, setLinks] = useState([]);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLinksModalOpen, setLinksModalOpen] = useState(false);
 
   let { authorization } = useContext(UserContext);
   if (!authorization) {
     authorization = JSON.parse(window.localStorage.getItem('token'));
   }
 
-  const handleLinksChange = (e) => {
-    setLinks(e.target.value);
-  }
+  const navigate = useNavigate();
+
+  const handleLinksChange = ({ target: { id, name, value } }) => {
+    const currentLinks = [...links];
+    currentLinks?.forEach((link) => {
+      if (link?.id === id) {
+        link = {
+          ...link,
+          [name]: value,
+        };
+      }
+    });
+
+    setLinks(currentLinks);
+  };
+
+  const handleRemoveLink = (id) => {
+    const currentLinks = [...links];
+    const newLinks = currentLinks.filter((link) => link.id !== id);
+    setLinks(newLinks);
+  };
+
+  const handleAddLink = () => {
+    const data = {
+      id: uuid(),
+      type: '',
+      link: '',
+    };
+    const currentLinks = [...links];
+    currentLinks.push(data);
+    setLinks(currentLinks);
+  };
+
+  const handleModalClose = () => {
+    setLinksModalOpen(false);
+  };
+
+  useEffect(() => {
+    console.log('links:', links);
+  }, [links]);
 
   const projectClick = async () => {
     const data = {
@@ -41,7 +147,7 @@ export default function ProjectCreation() {
       })
       .then((res) => {
         alert('Project has been created!');
-        // navigate(`/projects/${res.id}`);
+        navigate(`/projects/${res.data.id}`);
       })
       .catch((err) => {
         console.log(err);
@@ -57,6 +163,14 @@ export default function ProjectCreation() {
         <div className='page-title'>
           <h1>Create A Project</h1>
         </div>
+      </div>
+      <div className='links-btn-container'>
+        <button
+          className='btn btn-primary'
+          onClick={() => setLinksModalOpen(true)}
+        >
+          Add Links
+        </button>
       </div>
       <div className='project-add-form'>
         <div className='name-skills-container' style={{ flex: 1 }}>
@@ -105,17 +219,6 @@ export default function ProjectCreation() {
               onChange={(e) => setTags(e.target.value)}
             />
           </div>
-          <div className='form-group' style={{ height: '100%' }}>
-            <label htmlFor='links'>Links</label>
-            <textarea
-              className='form-control'
-              style={{ height: '100%' }}
-              id='links'
-              type='text'
-              placeholder='Enter Project Links related to the project if needed'
-              onChange={(e) => handleLinksChange(e)}
-            />
-          </div>
         </div>
       </div>
       <div style={{ textAlign: 'center', marginTop: '36px' }}>
@@ -132,6 +235,53 @@ export default function ProjectCreation() {
           </small>
         )}
       </div>
+      <div
+        class='modal fade'
+        id='exampleModalCenter'
+        tabindex='-1'
+        role='dialog'
+        aria-labelledby='exampleModalCenterTitle'
+        aria-hidden='true'
+      >
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+          <div class='modal-content'>
+            <div class='modal-header'>
+              <h5 class='modal-title' id='exampleModalLongTitle'>
+                Modal title
+              </h5>
+              <button
+                type='button'
+                class='close'
+                data-dismiss='modal'
+                aria-label='Close'
+              >
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </div>
+            <div class='modal-body'>...</div>
+            <div class='modal-footer'>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                data-dismiss='modal'
+              >
+                Close
+              </button>
+              <button type='button' class='btn btn-primary'>
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <LinksModal
+        show={isLinksModalOpen}
+        onHide={handleModalClose}
+        links={links}
+        handleLinksChange={handleLinksChange}
+        handleRemoveLink={handleRemoveLink}
+        handleAddLink={handleAddLink}
+      />
     </>
   );
 }
