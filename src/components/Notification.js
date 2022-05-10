@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Notification.css';
-import { Container, Form, Button, Row, Col, Card} from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Card, DropdownButton, Dropdown} from 'react-bootstrap';
 import Navbar from "./Navbar";
 import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
@@ -10,10 +10,12 @@ import { boolean } from 'yup';
 
 export default function Notification() {
     const [notifications, setNotifications] = useState([]);
-    const [projects, setProjects] = useState([]);
     const [memberRequests, setMemberRequests] = useState([]);
+    
+
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
     const {id} = useParams();
     let decision = false;
 
@@ -32,7 +34,7 @@ export default function Notification() {
             )
             .then((response) => {
                 setNotifications(response.data.notifications);
-                console.log(response);
+                //console.log(response);
                 
             })
             .catch((err) => {
@@ -43,15 +45,17 @@ export default function Notification() {
             });
     };
 
-    const getProjects = async(id) => {
-        await axiosInstance
-            .get('/users/createdProjects',{
-                headers: {'authorization': 'Bearer ' + authorization}, 
-            }
+    
+
+   const getAllProjectRequests = async () => {
+        // Get projects that user has created
+        const projects = await axiosInstance
+            .get('/users/createdProjects', {
+                    headers: {'authorization': 'Bearer ' + authorization}, 
+                }
             )
             .then((response) => {            
-                setProjects(response.data.projects);
-                console.log(response);
+                return response.data.projects;
             })
             .catch((err) => {
                 console.log(err);
@@ -59,36 +63,58 @@ export default function Notification() {
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
             });
-            console.log(projects);
-            
-    };
 
-
-    const getProjectRequest = async(id) => {
-        await axiosInstance
-            .get(`/projects/${id}/requests`,{
-                headers: {'authorization': 'Bearer ' + authorization}, 
-            }
-            )
-            .then((response) => {
-                setMemberRequests(response.data.memberRequests);
-                console.log(response);
-                console.log(memberRequests);
+        // Based on user-created projects, get the member requests for each project
+        // Store all the member requests in an array where each element represents a different project
+        const requests = [];
+        projects.map(async (project) => {
+            await axiosInstance
+                .get(`/projects/${project.id}/requests`,{
+                    headers: {'authorization': 'Bearer ' + authorization}, 
+                }
+                )
+                .then((response) => {
+                    const projectName = project.name;
+                    const projectRequests = response.data.memberRequests;
+                    Array.isArray(projectRequests) && projectRequests.length && requests.push({projectName: project.name, projectRequests: response.data.memberRequests});
+                })
+                .catch((err) => {
+                    console.log(err);
+                    console.log(err.response);
+                    setErrorMessage(err.response.data.msg); 
+                    setError(true);
+                });
+        })
+        setMemberRequests(requests);
+    }
+    
+    console.log(memberRequests);
+    // const getProjectRequest = async(id) => {
+    //     await axiosInstance
+    //         .get(`/projects/${id}/requests`,{
+    //             headers: {'authorization': 'Bearer ' + authorization}, 
+    //         }
+    //         )
+    //         .then((response) => {
+    //             setMemberRequests(response.data.memberRequests);
+    //             //console.log(response);
+    //             //console.log(memberRequests);
                 
-            })
-            .catch((err) => {
-                console.log(err);
-                console.log(err.response);
-                setErrorMessage(err.response.data.msg); 
-                setError(true);
-            });
-    };
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //             console.log(err.response);
+    //             setErrorMessage(err.response.data.msg); 
+    //             setError(true);
+    //         });
+    // };
 
+    
 
     useEffect(() => {
         getNotifications(id);
-        getProjects(id);
-        console.log(authorization); 
+        getAllProjectRequests();
+        
     }, []);
 
 
@@ -100,8 +126,6 @@ export default function Notification() {
             } 
             )
             .then((response) => {
-                
-                console.log(response);
                 alert("User was accepted!");
             })
             .catch((err) => {
@@ -119,8 +143,7 @@ export default function Notification() {
             } 
             )
             .then((response) => {
-                
-                console.log(response);
+
                 alert("User was accepted!");
             })
             .catch((err) => {
@@ -130,66 +153,56 @@ export default function Notification() {
                 setError(true);
             });
     };
-/*
-    let allRequest = [];
-   
-    for(let i=0; i < projects.length;i++){
-        allRequest.push(getProjectRequest(projects[i].id));
-    }
-    console.log(allRequest);
-*/
+
     return (
         <section id="header">  
-        <Container>
-                   
-          <Row>
+        <Container>        
+            <Row>
                 <Col>
-                <h1 className="text-info">Notifications</h1> 
-                
-                {notifications?.map((notification) => {
-                
-                   return(
-                    <Card>
-                    <Card.Header>{notification.type}</Card.Header>
-                    <Card.Body>
-                      <blockquote className="blockquote mb-0">
-                        <p>
-                          {' '}
-                          {notification.subject}{' '}
-                        </p>
-                        <footer className="blockquote-footer">
-                          {notification.body}
-                        </footer>
-                      </blockquote>
-                    </Card.Body>
-                  </Card>
+                    <h1 className="text-info">Notifications</h1> 
+                        {notifications?.map((notification) => {
+                            return(
+                                <Card>
+                                    <Card.Header>{notification.type}</Card.Header>
+                                    <Card.Body>
+                                        <blockquote className="blockquote mb-0">
+                                        <p>
+                                            {' '}
+                                            {notification.subject}{' '}
+                                            
+                                        </p>
+                                        <footer className="blockquote-footer">
+                                            {notification.body}
+                                        </footer>
+                                        </blockquote>
+                                    </Card.Body>
+                                </Card>
                     
-                    );
-                }
-                
-            )}
-             
-                
+                            );
+                        }
+                        )}
                 </Col>
                 <Col>
                 </Col>
+                
                 <Col>
                 <h1 className="text-info">Member Approval</h1>
-                
-     
-        
+             
+               
         <div>   
-
-      
-        
-            
-                {memberRequests?.map((memberRequest) => {
+        {console.log(memberRequests)}
                 
-                   return(
-                        
-                    <div>
+                {memberRequests?.map((memberRequest) => {
+               
+                   return (
+                  
+
+                
+
+                   <div>
                         <Form.Group className="mb-3" controlId="submitform">
-                            <Form.Control type="text" defaultValue = {memberRequest.username} readOnly />
+                            <Form.Control type="text" defaultValue = {memberRequest?.projectName} readOnly />
+                            <Form.Control type="text" defaultValue = {memberRequest?.projectRequests} readOnly />
                             <Button variant="outline-info" type="submit" onClick={() => AcceptButton(memberRequest.id)} >
                                 Accept
                             </Button> {'    '}
@@ -199,15 +212,19 @@ export default function Notification() {
                         </Form.Group>
                     </div>
                     );
-                }
-                
+                }     
             )} 
+      
+        </div>
+                </Col>             
+            </Row>                           
+        </Container>
+        </section>
+      );
+}
 
-       
-        
 
-   
-            {/*
+ {/*
             {memberRequests?.map((memberRequest, index) => (
               <option key={`project-option-${index}`} value={memberRequest.id}>
                 
@@ -228,38 +245,3 @@ export default function Notification() {
 
 
             </div>*/}
-
-
-                {/*
-                <div>
-                    <Form.Group className="mb-3" controlId="submitform">
-                        <Form.Control type="text" defaultValue = "Name" readOnly />
-                        <Button variant="outline-info" type="submit" onClick={AcceptButton} >
-                            Accept
-                        </Button> {'    '}
-                        <Button variant="outline-info" type="submit" onClick={DeclineButton} >
-                            Decline
-                        </Button>
-                    </Form.Group>
-        </div>*/}
-        </div>
-                </Col>             
-            </Row>                           
-        </Container>
-        </section>
-      );
-}
-
-/* <div className='form-group form-element'>
-          <select
-            name='project'
-            onChange={getProjectRequest}
-            className='form-select'
-          >
-            {projects?.map((project, index) => (
-              <option key={`project-option-${index}`} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>*/

@@ -283,12 +283,12 @@ export default function ProjectPage() {
                             <Form.Control as="textarea" rows={3} defaultValue = {description} readOnly/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            {/* <Form.Label>Project Members</Form.Label>
+                            <Form.Label>Project Members</Form.Label>
                            {membersWithJoinDates?.map((member, index) => {              
                         return(
                             <Form.Control type="text" key={index} defaultValue = {member.username + "  " +  member.joinedAt.substring(0,10)}  readOnly/>   
                         );
-                        })} */}
+                        })} 
                             </Form.Group>
                             </Form>
                         </Col>
