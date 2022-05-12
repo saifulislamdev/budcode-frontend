@@ -38,7 +38,7 @@ export default function Feed() {
             subject,
             body,
             author: username,
-            time_posted: new Date().toLocaleString(),
+            time_posted: new Date().toLocaleString('en-US'),
         };
 
         const sortedData = [...updatesList, update].sort((a, b) => {
@@ -141,7 +141,7 @@ export default function Feed() {
                             <h3>My Projects</h3>
                         </div>
                     </div>
-
+                     <div className = "only-project-cards">
                     {projectData?.map((project) => (
                         <div
                             key={`project-link-${project.projectId}`}
@@ -152,7 +152,9 @@ export default function Feed() {
                                 <h3>{project.projectName}</h3>
                             </div>
                         </div>
+                           
                     ))}
+                     </div> 
                 </div>
             </div>
         </>
