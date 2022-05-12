@@ -177,6 +177,7 @@ export default function Notification() {
                                         </blockquote>
                                     </Card.Body>
                                 </Card>
+                                
                     
                             );
                         }
@@ -201,8 +202,8 @@ export default function Notification() {
 
                    <div>
                         <Form.Group className="mb-3" controlId="submitform">
-                            <Form.Control type="text" defaultValue = {memberRequest?.projectName} readOnly />
-                            <Form.Control type="text" defaultValue = {memberRequest?.projectRequests} readOnly />
+                            <Form.Control type="text" defaultValue = {memberRequest.projectName} readOnly />
+                            <Form.Control type="text" defaultValue = {memberRequest.projectRequests} readOnly />
                             <Button variant="outline-info" type="submit" onClick={() => AcceptButton(memberRequest.id)} >
                                 Accept
                             </Button> {'    '}
