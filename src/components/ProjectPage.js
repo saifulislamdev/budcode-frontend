@@ -1,11 +1,48 @@
 import React from 'react';
 import './ProjectPage.css';
 import {useContext, useEffect, useState, useRef} from 'react';
-import { Container, Form, Button, Row, Col, Popover, OverlayTrigger, Overlay, Tooltip} from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Popover, OverlayTrigger, Overlay, Tooltip,Alert,Modal, Badge, ListGroup, Card} from 'react-bootstrap';
 import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
 import { join } from 'lodash';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+
+const useStyles = makeStyles((theme) => ({
+    icon: {
+      marginRight: theme.spacing(2),
+    },
+    heroContent: {
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(8, 0, 6),
+    },
+    heroButtons: {
+      marginTop: theme.spacing(4),
+    },
+    cardGrid: {
+      paddingTop: theme.spacing(8),
+      paddingBottom: theme.spacing(8),
+    },
+    card: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    cardMedia: {
+      paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+      flexGrow: 1,
+    },
+    footer: {
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(6),
+    },
+  }));
+
 
 export default function ProjectPage() {
 
@@ -26,6 +63,13 @@ export default function ProjectPage() {
     const [membersWithJoinDates, setMembersWithJoinDates] = useState([]);
     const [status, setStatus] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
+    const [creatorUserName, setCreatorUserName] = useState('');
+    const [creatorEmail, setCreatorEmail] = useState('');
+    const [numOfFollowers, setNumOfFollowers] = useState('');
+    const [userMutualSkills, setUserMutualSkills] = useState([]);
+    const [message, setMessage] = useState("");
+
     const {id} = useParams();
 
     let { authorization } = useContext(UserContext);
@@ -55,7 +99,11 @@ export default function ProjectPage() {
                 setIsUserAMember(response.data.isUserAMember);
                 setIsValidUser(response.data.isValidUser);
                 setMembersWithJoinDates(response.data.members);
-
+                setCreatedAt(response.data.createdAt);
+                setCreatorUserName(response.data.creatorUserName);
+                setCreatorEmail(response.data.creatorEmail);
+                setNumOfFollowers(response.data.numOfFollowers);
+                setUserMutualSkills(response.data.userMutualSkills);
                 // take only usernames of project members (no join date) and put it in an array 
                 // the array is then converted to a string
                 setMembers(
@@ -126,9 +174,9 @@ export default function ProjectPage() {
 
     const requestJoinProject = async (e) => {
         e.preventDefault();
-        setError(false);  
+        setError(false);
             try {
-                const response = await axiosInstance.post(`/projects/${id}/requests`, {}, {
+                const response = await axiosInstance.post(`/projects/${id}/requests`, {message}, {
                     headers: {'authorization': 'Bearer ' + authorization},
                 },
                 );       
@@ -140,7 +188,8 @@ export default function ProjectPage() {
                 console.log(err.response);
                 setErrorMessage(err.response.data.msg); 
                 setError(true);
-            }      
+            }
+            setShow(false);      
     };
 
     const followProject = async (e) => {
@@ -174,16 +223,173 @@ export default function ProjectPage() {
         setMembers(clonedData);
     }*/
     
-    
+    const classes = useStyles();
+
     const [show, setShow] = useState(false);
-  const target = useRef(null);
-  console.log('members', members);
-  console.log('membersWithJoinDates', membersWithJoinDates);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+    const skills2 = skills.split(',');
+    const tags2 = tags.split(',');
+    const members2 = members.split(',');
+  
+    const target = useRef(null);
+    console.log('members', members);
+    console.log('membersWithJoinDates', membersWithJoinDates);
     return (
         <section id="header">
             <Container>
                 {canUserEdit && (
                     <div>
+                        <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                        {name}
+                        </Typography>
+                        <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                        {description}
+                        </Typography>
+                        <Form.Group className='button-form'>
+                            <Button variant="outline-info" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
+                        </Form.Group>
+                        <Modal show={show} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Message</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                            <Form>
+                                <Form.Group
+                                className="mb-3"
+                                controlId="exampleForm.ControlTextarea1"
+                                >
+                                <Form.Control as="textarea" rows={3} onChange = {(e) => (setMessage(e.target.value))}/>
+                                </Form.Group>
+                            </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={requestJoinProject}>
+                                Request
+                            </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    <Row>
+                        <Col></Col>
+                        <Col>
+                        <h2 className="text-info">Creator:</h2>
+                        <h4>{creatorUserName}</h4>
+                        </Col>
+                        <Col>
+                        <h2 className="text-info">Created:</h2>
+                        <h4>{createdAt.substring(0,10)}</h4>
+                        </Col>
+                        <Col>
+                        <h2 className="text-info"># of Followers:</h2>
+                        <h4>{numOfFollowers}</h4>
+                        </Col>
+                        <Col></Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                        <h1 className="text-info">Status</h1>
+                        <Badge pill bg="success">
+                            {status}
+                        </Badge>
+                        </Col>
+                        <Col>
+                        <h1 className="text-info">Requirements</h1>
+                        <div className="skills-scroll">
+                            {skills2.map((skill) => {
+                                return (
+                                    <ListGroup>
+                                        <ListGroup.Item>{skill}</ListGroup.Item>
+                                    </ListGroup>
+                                );
+
+                            })
+                            }  
+                            </div>
+                        </Col>
+                        <Col>
+                        <h1 className="text-info">Tags</h1>
+                        <div className="tags-scroll">
+                            {tags2.map((tag) => {
+                                return (
+                                    <ListGroup>
+                                        <ListGroup.Item>{tag}</ListGroup.Item>
+                                    </ListGroup>
+                                );
+
+                            })
+                            }  
+                            </div>
+                        </Col>
+                        <Col>
+                        <h1 className="text-info">Links</h1>
+                        {links.map((link) => {
+                                return (
+                                    <Card style={{ width: '18rem' }}>
+                                    <Card.Body>
+                                        <Card.Title>{link.type}</Card.Title>
+                                        <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>    
+                                    </Card.Body>
+                                    </Card>
+                                );                                   
+                            })
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col></Col>
+                        <Col>
+                        <h1 className="text-info">Members</h1>
+                        {membersWithJoinDates.map((member) => {
+                                return (
+                                    <Card style={{ width: '18rem' }}>
+                                    <Card.Body>
+                                        <Card.Title>{member.username}</Card.Title>
+                                        <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
+                                        <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
+                                    </Card.Body>
+                                    </Card>
+                                );                                   
+                            })
+                            }
+                        </Col>
+                        <Col>
+                        <h1 className="text-info">User Mutual Skills</h1>
+                        <div className="mutual-scroll">
+                            {userMutualSkills.map((userMutualSkill) => {
+                                return (
+                                    <ListGroup>
+                                        <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
+                                    </ListGroup>
+                                );
+
+                            })
+                            }  
+                            </div>
+                        </Col>
+                        <Col></Col>
+                    </Row>
+                    <Row>
+                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+                        Contact Me:
+                        </Typography>
+                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                        {creatorEmail}
+                        </Typography>
+                    </Row>
+                    <Row>
+                        <Alert variant="info">
+                            <Alert.Heading>Hey, nice to see you!</Alert.Heading>
+                            <p>
+                                Below you can edit the details for your project and above this, you can see how your project will look to others.
+                            </p>                 
+                        </Alert>
+                    </Row>
+                     
                     <Row>               
                         <Col>  
                         </Col>
@@ -229,6 +435,20 @@ export default function ProjectPage() {
                             <Form.Label>Project Tags</Form.Label>
                             <Form.Control as="textarea" rows={3} defaultValue = {tags} onChange = {(e) => (setTags(e.target.value))}/>
                             </Form.Group>
+                            <Form.Label>Links</Form.Label>
+                            {links.map((link) => {
+                                return (
+                                <Form>
+                                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                
+                                <Form.Control type="text" defaultValue = {link.type} onChange = {(e) => (setLinks(e.target.value))}/>
+                                <Form.Control type="text" defaultValue = {link.link} onChange = {(e) => (setLinks(e.target.value))}/>
+                                </Form.Group>
+                                </Form>
+
+                                );
+                            })
+                        }
                             </Form>
                         </Col>
                     </Row>   
@@ -249,72 +469,167 @@ export default function ProjectPage() {
 
                 {!canUserEdit && (
                     <div>
-                    <Row>               
-                        <Col>  
-                        </Col>
-                        <Col>
-                            <Form>
-                            <Form.Group>
-                            <Form.Label>Project Title</Form.Label>
-                            <Form.Control type="text" defaultValue = {name} readOnly/>
-                            </Form.Group>
-                            </Form>
-                        </Col>
-                        <Col>
-                            {isValidUser && (
-                            <Form.Group>
+                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                    {name}
+                    </Typography>
+                    <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                    {description}
+                    </Typography>
+                    {isValidUser && canUserFollow && canUserRequest && !hasUserRequested && (
+                            <Form.Group className='button-form'>
                             <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
-                            <Button variant="outline-info" type="submit" onClick={requestJoinProject}>Interested</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow}>Interested</Button>{' '}
                             </Form.Group>
-                            )}
-                            {!isValidUser && (
-                            <Form.Group>
+                    )}
+                    {isValidUser && !canUserFollow && canUserRequest && !hasUserRequested && (
+                            <Form.Group className='button-form'>
+                            <Button variant="outline-info" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow}>Interested</Button>{' '}
+                            </Form.Group>
+                    )}
+                    {isValidUser && canUserFollow && !canUserRequest && hasUserRequested && (
+                            <Form.Group className='button-form'>
+                            <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
+                            </Form.Group>
+                    )}
+                    {!isValidUser && (
+                            <Form.Group className='button-form'>
                             <Button variant="secondary" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
-                            <Button variant="secondary" type="submit" onClick={requestJoinProject} disabled>Interested</Button>{' '}
+                            <Button variant="secondary" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
                             </Form.Group>
+                    )} 
 
-                            
-                            )}             
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col> 
-                            <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Project Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} defaultValue = {description} readOnly/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Project Members</Form.Label>
-                           {membersWithJoinDates?.map((member, index) => {              
-                        return(
-                            <Form.Control type="text" key={index} defaultValue = {member.username + "  " +  member.joinedAt.substring(0,10)}  readOnly/>   
-                        );
-                        })} 
-                            </Form.Group>
-                            </Form>
-                        </Col>
-                        <Col>
-                            <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Project Requirements</Form.Label>
-                            <Form.Control as="textarea" rows={3} defaultValue = {skills} readOnly/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Status</Form.Label>
-                            <Form.Control type="text" defaultValue = {status} readOnly/>
-                            </Form.Group>
-                            </Form>
-                        </Col>
-                        <Col>
-                            <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Project Tags</Form.Label>
-                            <Form.Control as="textarea" rows={3} defaultValue = {tags} readOnly/>
-                            </Form.Group>
-                            </Form>
-                        </Col>
-                    </Row>
+                     <Modal show={show} onHide={handleClose}>
+                         <Modal.Header closeButton>
+                         <Modal.Title>Message</Modal.Title>
+                         </Modal.Header>
+                         <Modal.Body>
+                         <Form>
+                             <Form.Group
+                             className="mb-3"
+                             controlId="exampleForm.ControlTextarea1"
+                             >
+                             <Form.Control as="textarea" rows={3} onChange = {(e) => (setMessage(e.target.value))}/>
+                             </Form.Group>
+                         </Form>
+                         </Modal.Body>
+                         <Modal.Footer>
+                         <Button variant="secondary" onClick={handleClose}>
+                             Close
+                         </Button>
+                         <Button variant="primary" onClick={requestJoinProject}>
+                             Request
+                         </Button>
+                         </Modal.Footer>
+                     </Modal>
+                 <Row>
+                     <Col></Col>
+                     <Col>
+                     <h2 className="text-info">Creator:</h2>
+                     <h4>{creatorUserName}</h4>
+                     </Col>
+                     <Col>
+                     <h2 className="text-info">Created:</h2>
+                     <h4>{createdAt.substring(0,10)}</h4>
+                     </Col>
+                     <Col>
+                     <h2 className="text-info"># of Followers:</h2>
+                     <h4>{numOfFollowers}</h4>
+                     </Col>
+                     <Col></Col>
+                 </Row>
+                 <Row>
+                     <Col>
+                     <h1 className="text-info">Status</h1>
+                     <Badge pill bg="success">
+                         {status}
+                     </Badge>
+                     </Col>
+                     <Col>
+                     <h1 className="text-info">Requirements</h1>
+                     <div className="skills-scroll">
+                         {skills2.map((skill) => {
+                             return (
+                                 <ListGroup>
+                                     <ListGroup.Item>{skill}</ListGroup.Item>
+                                 </ListGroup>
+                             );
+
+                         })
+                         }  
+                         </div>
+                     </Col>
+                     <Col>
+                     <h1 className="text-info">Tags</h1>
+                     <div className="tags-scroll">
+                         {tags2.map((tag) => {
+                             return (
+                                 <ListGroup>
+                                     <ListGroup.Item>{tag}</ListGroup.Item>
+                                 </ListGroup>
+                             );
+
+                         })
+                         }  
+                         </div>
+                     </Col>
+                     <Col>
+                     <h1 className="text-info">Links</h1>
+                     {links.map((link) => {
+                             return (
+                                 <Card style={{ width: '18rem' }}>
+                                 <Card.Body>
+                                     <Card.Title>{link.type}</Card.Title>
+                                     <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>    
+                                 </Card.Body>
+                                 </Card>
+                             );                                   
+                         })
+                         }
+                     </Col>
+                 </Row>
+                 <Row>
+                     <Col></Col>
+                     <Col>
+                     <h1 className="text-info">Members</h1>
+                     {membersWithJoinDates.map((member) => {
+                             return (
+                                 <Card style={{ width: '18rem' }}>
+                                 <Card.Body>
+                                     <Card.Title>{member.username}</Card.Title>
+                                     <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
+                                     <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
+                                 </Card.Body>
+                                 </Card>
+                             );                                   
+                         })
+                         }
+                     </Col>
+                     <Col>
+                     <h1 className="text-info">User Mutual Skills</h1>
+                     <div className="mutual-scroll">
+                         {userMutualSkills.map((userMutualSkill) => {
+                             return (
+                                 <ListGroup>
+                                     <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
+                                 </ListGroup>
+                             );
+
+                         })
+                         }  
+                         </div>
+                     </Col>
+                     <Col></Col>
+                 </Row>
+                 <Row>
+                 <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+                     Contact Me:
+                     </Typography>
+                     <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                     {creatorEmail}
+                     </Typography>
+                 </Row>              
                     {error ? (
                                 <p style={{ color: 'red' }}>
                                     {errorMessage}
