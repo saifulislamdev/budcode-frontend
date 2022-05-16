@@ -94,7 +94,7 @@ const Navbar = () => {
           <a href="#faq">FAQ</a>
           </li>
           <li>
-            <a href="">Search</a>
+            <a href="/projects/search">Search</a>
           </li>
           <li className="nav-btn">
             <Button2 text={"Sign Up"} btnClass={"btn-dark2"} href={"/auth/signup"} />

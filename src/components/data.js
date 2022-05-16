@@ -8,24 +8,24 @@ export const FeatureList = [
     id: 1,
     icon: <BsFillEmojiSmileFill color="#0a1930" size={22} />,
     heading: "Designed for you",
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae veniam dolorum repellendus obcaecati minus voluptas neque dolore similique.",
+    text: "Designed for you, choose from a large variety of projects that suit your needs or create your own project with your requirements.",
   },
   {
     id: 2,
     icon: <BsFillFileEarmarkCodeFill color="#0a1930" size={22} />,
     heading: "Work on projects",
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae veniam dolorum repellendus obcaecati minus voluptas neque dolore similique.",
+    text: "Find a project that you want to work on and request to join with other people looking to gain more experience!",
   },
   {
     id: 3,
     icon: <BsFillKeyboardFill color="#0a1930" size={22} />,
     heading: "Improve your skills",
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae veniam dolorum repellendus obcaecati minus voluptas neque dolore similique.",
+    text: "Improve your communication, coding, and various soft skills while collaborating on projects with other people.",
   },
   {
     id: 4,
     icon: <BsPeopleFill color="#0a1930" size={22} />,
     heading: "Create connections",
-    text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae veniam dolorum repellendus obcaecati minus voluptas neque dolore similique.",
+    text: "Create connections while working together with other coders!",
   },
 ];

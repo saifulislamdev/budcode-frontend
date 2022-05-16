@@ -1,19 +1,18 @@
 import { useState, useContext } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { axiosInstance } from '../util/config';
-
+import { Card } from 'react-bootstrap';
 import { UserContext } from '../util/context';
+import { Typography } from '@mui/material';
 
 const colors = {
   orange: '#FFBA5A',
   grey: '#a9a9a9',
 };
 
-export default function Rating({ firstName, userId }) {
+export default function Rating({ firstName, userId, reviews,canReview }) {
   const [rating, setRating] = useState({ subject: '', body: '' });
   const { authorization } = useContext(UserContext);
-
-
 
   // const [currentValue, setCurrentValue] = useState(0);
   // const [hoverValue, setHoverValue] = useState(undefined);
@@ -38,7 +37,7 @@ export default function Rating({ firstName, userId }) {
   const handleSubmitRating = async () => {
     const { subject, body } = rating;
     const data = {
-      reviewed_username:  userId,
+      reviewed_username: userId,
       subject,
       body,
     };
@@ -49,7 +48,8 @@ export default function Rating({ firstName, userId }) {
 
   return (
     <div style={styles.container}>
-      <h2> {`Rate ${firstName}`} </h2>
+      <h2> {`Reviews of ${firstName}`} </h2>
+      {reviews.length ? <h4> {`Reviewed by  ${JSON.parse(window.localStorage.getItem('username'))}`} </h4>:<></>}
       {/* <div style={styles.stars}>
         {stars.map((_, index) => {
           return (
@@ -68,22 +68,42 @@ export default function Rating({ firstName, userId }) {
           )
         })}
       </div> */}
+      {!canReview &&<div style={{color: 'red',
+  fontStyle:'bold'}} >
+      <p>{`You either do not have the permission to review ${firstName} or the project that you both have been working on is still in progress`}</p>
+      </div>}
       <input
         name='subject'
         type='text'
         placeholder='Subject'
+        disabled={!canReview}
+        onChange={handleInputChange}
         style={{ width: 300, padding: 8 }}
       />
       <textarea
         name='body'
-        placeholder='Write your experience!'
-        onChange={handleInputChange}
+        disabled={!canReview}
         style={styles.textarea}
+        onChange={handleInputChange}
+        placeholder='Write your experience!'
       />
 
-      <button onClick={handleSubmitRating} style={styles.button}>
+      <button onClick={handleSubmitRating} style={styles.button} disabled={!canReview}>
         Submit
       </button>
+      <h1 className='text-info'>Previous Reviews</h1>
+      <div className='project-following-scroll'>
+        {reviews.map((review) => {
+          return (
+            <Card >
+              <Card.Body>
+                <Card.Title>{review.subject}</Card.Title>
+                <Card.Text>{review.body}</Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }
