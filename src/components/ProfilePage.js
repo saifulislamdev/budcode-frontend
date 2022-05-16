@@ -1,446 +1,606 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import './ProfilePage.css';
-import { Container, Form, Button, Row, Col, ListGroup, Card, Alert} from 'react-bootstrap';
-import {UserContext} from '../util/context';
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Card,
+  Alert,
+} from 'react-bootstrap';
+import { UserContext } from '../util/context';
 import { axiosInstance } from '../util/config';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import Rating from './Rating';
-import Carousel from 'react-bootstrap/Carousel'
-import gradientPic from '../assets/gradientPic.jpg'
-
+import Carousel from 'react-bootstrap/Carousel';
+import gradientPic from '../assets/gradientPic.jpg';
 
 export default function ProfilePage() {
+  const { id } = useParams();
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const username = JSON.parse(window.localStorage.getItem('username'));
+  let { authorization } = useContext(UserContext);
+  if (!authorization) {
+    authorization = JSON.parse(window.localStorage.getItem('authorization'));
+  }
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [bio, setBio] = useState('');
+  const [occupation, setOccupation] = useState('');
+  const [links, setLinks] = useState([]);
+  const [interests, setInterests] = useState('');
+  const [skills, setSkills] = useState('');
+  const [canEdit, setCanEdit] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [projectFollowings, setProjectFollowings] = useState([]);
+  const [projectMemberships, setProjectMemberships] = useState([]);
+  const [canReview,setCanReview] = useState(false);
+  const [isProfileOfLoggedInUser, setIsProfileOfLoggedInUser] = useState(
+    username === id
+  );
+  const [otherProfileProjectMemberships, setOtherProfileProjectMemberships] =
+    useState([]);
+  const [isOtherMemberProjectIdInGroup, setIsOtherMemberProjectIdInGroup] =
+    useState(false);
 
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const username = JSON.parse(window.localStorage.getItem('username'));
-    let { authorization } = useContext(UserContext);
-    if (!authorization) {
-        authorization = JSON.parse(window.localStorage.getItem('authorization'));
-    }
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [bio, setBio] = useState('');
-    const [occupation, setOccupation] = useState('');
-    const [links, setLinks] = useState([]);
-    const [interests, setInterests] = useState('');
-    const [skills, setSkills] = useState('');
-    const [canEdit, setCanEdit] = useState(null);
-    const [projectFollowings, setProjectFollowings] = useState([]);
-    const [projectMemberships, setProjectMemberships] = useState([]);
-    let navigate = useNavigate(); 
-    const {id} = useParams();
-   
-    const getUser = async (id) => {
-        await axiosInstance
-            .get(`/users/${id}` , {
-                headers: {'authorization': 'Bearer ' + authorization}, 
-            } 
-            )
-            .then((response) => {
-                const {firstName, lastName, gender, email, bio, occupation, links, interests, skills} = response.data;
-                setCanEdit(response.data.canEdit);
-                setFirstName(response.data.firstName);
-                setLastName(response.data.lastName);
-                setEmail(response.data.email);
-                setBio(response.data.bio);
-                setOccupation(response.data.occupation);
-                setLinks(response.data.links);
-                setInterests(response.data.interests.toString());               
-                setSkills(response.data.skills.toString());
-                setProjectFollowings(response.data.projectFollowings);
-                setProjectMemberships(response.data.projectMemberships);
-            })
-            .catch((err) => {
-                console.log(err);
-                console.log(err.response);
-                setErrorMessage(err.response.data.msg); 
-                setError(true);
-            });
-    };
-    
-   useEffect(() => {
-    console.log(username);
-    console.log(authorization);
-    getUser(id);  
-}, []);
+  useEffect(() => {
+    setIsProfileOfLoggedInUser(username === id);
+  }, [id]);
 
-   const editProfile = async (e) => {
-    e.preventDefault();
-    setError(false); 
-    console.log(canEdit);    
-    if(canEdit == true) {
-            const putData = {
-                firstName: firstName,
-                lastName : lastName,
-                email : email,
-                bio: bio,
-                occupation: occupation,
-                links: links,
-                interests: interests.split(','),
-                skills: skills.split(','),
-            };
-            try {
-                const response = await axiosInstance.put(`/users/${id}`, putData, {
-                    headers: {'authorization': 'Bearer ' + authorization}
-                },
-                );
-                
-                alert("Profile was edited successfully!");
-                console.log(response);
-                console.log(id);           
-            }
-            catch(err) {
-                console.log(err);
-                    console.log(err.response);
-                    setErrorMessage(err.response.data.msg); 
-                    setError(true);
-            }
-        }  
-    };
+  console.log('projectFollowings', projectFollowings);
 
-    const skills2 = skills.split(',');
-    const interests2 = interests.split(',');
+  const getUser = useCallback(async (id) => {
+    await axiosInstance
+      .get(`/users/${id}`, {
+        headers: { authorization: 'Bearer ' + authorization },
+      })
+      .then((response) => {
+        const {
+          firstName,
+          lastName,
+          gender,
+          email,
+          bio,
+          occupation,
+          links,
+          interests,
+          skills,
+          reviews,
+          canReview,
+          projectFollowings,
+          projectMemberships,
+        } = response.data;
+        if (isProfileOfLoggedInUser) {
+          setCanEdit(canEdit);
+          setFirstName(firstName);
+          setLastName(lastName);
+          setEmail(email);
+          setBio(bio);
+          setOccupation(occupation);
+          setLinks(links);
+          setReviews(reviews);
+          setSkills(skills.toString());
+          setInterests(interests.toString());
+          setProjectFollowings(projectFollowings);
+          setProjectMemberships(projectMemberships);
+          localStorage.setItem(
+            'loggedInUserMemberships',
+            JSON.stringify(projectMemberships)
+          );
+        } else {
+          setBio(bio);
+          setLinks(links);
+          setEmail(email);
+          setReviews(reviews);
+          setCanEdit(canEdit);
+          setLastName(lastName);
+          setFirstName(firstName);
+          setOccupation(occupation);
+          setSkills(skills.toString());
+          setInterests(interests.toString());
+          setProjectFollowings(projectFollowings);
+          setProjectMemberships(projectMemberships);
+          setCanReview(canReview)
+          setOtherProfileProjectMemberships(projectMemberships);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(err.response);
+        setErrorMessage(err.response.data.msg);
+        setError(true);
+      });
+  }, []);
+  useEffect(() => {
+    getUser(id);
+  }, []);
 
-    return (
-        <section id="header">          
-        <Container>               
-            {!canEdit && (
-                <div>
-                    <Row>
-                        <Carousel fade>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="First slide"
-                            />
-                            <Carousel.Caption>
-                                <h1>Welcome to {firstName} {lastName}'s Profile!</h1>
-                                <p>{firstName} {lastName} is a(n): {occupation}</p>
-                            </Carousel.Caption>
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="Second slide"
-                                />
-                            <Carousel.Caption>
-                                <h1>About Me</h1>
-                                <p>{bio}</p>
-                            </Carousel.Caption>
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="Third slide"
-                                />
-                            <Carousel.Caption>
-                                <h1>Contact Me</h1>
-                                <p>{email}</p>
-                            </Carousel.Caption>
-                            </Carousel.Item>
-                        </Carousel>
-                    </Row>                    
-                    <Row>
-                        <Col xs lg="2">
-                            <h1 className="text-info">Skills</h1>
-                            {skills2.map((skill) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{skill}</ListGroup.Item>
-                                    </ListGroup>
-                                );
-                            })
-                            }    
+  const getOtherPersonProfileDetails = useCallback((otherPersonUserName) => {
+    getUser(otherPersonUserName);
+  }, []);
 
-                            <h1 className="text-info">Interests</h1>
-                            {interests2.map((interest) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{interest}</ListGroup.Item>
-                                    </ListGroup>
-                                );
-                            })
-                            }                        
-                        </Col>
-                        <Col md="auto">
-                        <h1 className="text-info">Links</h1>
-                            {links.map((link) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{link.type}</Card.Title>
-                                        <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>    
-                                    </Card.Body>
-                                    </Card>
-                                );                                   
-                            })
-                            }
-                                         
-                        </Col>
-                        <Col md="auto">
-                            <h1 className="text-info">Project Following</h1>
-                            <div className="project-following-scroll">
-                            {projectFollowings.map((projectFollowing) => {
-                                return (
-                                    <Card>
-                                    <Card.Body>
-                                        <Card.Title>{projectFollowing.projectName}</Card.Title>
-                                        <Card.Text>
-                                        The project id is: {projectFollowing.projectId}
-                                        </Card.Text>
-                                        <Card.Link href={'/projects/' + projectFollowing.projectId}>Link to project</Card.Link>
-                                    </Card.Body>
-                                    </Card>
-                                );
-                            })
-                            }
-                            </div>
-                        </Col>
-                        <Col xs lg="4">
-                            <h1 className="text-info">Project Membership</h1>
-                            <div className="project-membership-scroll">
-                        
-                            {projectMemberships.map((projectMembership) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{projectMembership.projectName}</Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">{projectMembership.projectStatus}</Card.Subtitle>
-                                        <Card.Text>
-                                        The project id is: {projectMembership.projectId}
-                                        </Card.Text>
-                                        <Card.Link href={'/projects/' + projectMembership.projectId}>Link to project</Card.Link>
-                                    </Card.Body>
-                                    </Card>
-                                    );
-                                })
-                                }
-                            </div>
-                        </Col>
-                    </Row>
-                    </div>
-                )
-            }
-            {canEdit && (
-                <div>
-                   <Row>
-                        <Carousel fade>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="First slide"
-                            />
-                                <Carousel.Caption>
-                                <h1>Welcome to {firstName} {lastName}'s Profile!</h1>
-                                <p>{firstName} {lastName} is a(n): {occupation}</p>
-                                </Carousel.Caption>
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="Second slide"
-                            />
-                                <Carousel.Caption>
-                                <h1>About Me</h1>
-                                <p>{bio}</p>
-                                </Carousel.Caption>
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                className="d-block w-100"
-                                src={gradientPic}  style = {{height: '200px', width: '100px'}}
-                                alt="Third slide"
-                            />
-                                <Carousel.Caption>
-                                <h1>Contact Me</h1>
-                                <p>{email}</p>
-                                </Carousel.Caption>
-                            </Carousel.Item>
-                        </Carousel>
-                    </Row>       
-                    <Row>
-                        <Col xs lg="2">
-                            <h1 className="text-info">Skills</h1>
-                            <div className="skills-scroll">
-                            {skills2.map((skill) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{skill}</ListGroup.Item>
-                                    </ListGroup>
-                                );
+  useEffect(() => {
+    !isProfileOfLoggedInUser && getOtherPersonProfileDetails(id);
+  }, []);
 
-                            })
-                            }  
-                            </div>
-                            <h1 className="text-info">Interests</h1>
-                            <div className="interest-scroll">
-                            {interests2.map((interest) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{interest}</ListGroup.Item>
-                                    </ListGroup>
-                                );
-
-                            })
-                            } 
-                            </div>                   
-                        </Col>
-                        <Col md="auto">
-                        <h1 className="text-info">Links</h1>
-                            {links.map((link) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{link.type}</Card.Title>
-                                        <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>
-                                        
-                                    </Card.Body>
-                                    </Card>
-                                );
-                            })
-                            }
-                        </Col>
-                        <Col md="auto">
-                            <h1 className="text-info">Project Following</h1>
-                            <div className="project-following-scroll">
-                            {projectFollowings.map((projectFollowing) => {
-                                return (
-                                    <Card>
-                                    <Card.Body>
-                                        <Card.Title>{projectFollowing.projectName}</Card.Title>
-                                        <Card.Text>
-                                        The project id is: {projectFollowing.projectId}
-                                        </Card.Text>
-                                        <Card.Link href={'/projects/' + projectFollowing.projectId}>Link to project</Card.Link>
-                                    </Card.Body>
-                                    </Card>
-                                );
-                            })
-                            }
-                            </div>
-
-                           
-                        </Col>
-                        <Col xs lg="4">
-                            <h1 className="text-info">Project Membership</h1>
-                            <div className="project-membership-scroll">
-                            {projectMemberships.map((projectMembership) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{projectMembership.projectName}</Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">{projectMembership.projectStatus}</Card.Subtitle>
-                                        <Card.Text>
-                                        The project id is: {projectMembership.projectId}
-                                        </Card.Text>
-                                        <Card.Link href={'/projects/' + projectMembership.projectId}>Link to project</Card.Link>
-                                    </Card.Body>
-                                    </Card>
-                                );
-                            })
-                            }
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Alert variant="info">
-                            <Alert.Heading>Hey, nice to see you!</Alert.Heading>
-                            <p>
-                                Below you can edit the details for your profile and above this, you can see how your profile will look to others.
-                            </p>                 
-                        </Alert>
-                    </Row>
-                    <Row>
-                        <Col>           
-                            <Form>
-                            <Form.Group>
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control type="text" defaultValue = {firstName} onChange = {(e) => (setFirstName(e.target.value))}/>
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control type="text" defaultValue = {lastName} onChange = {(e) => (setLastName(e.target.value))}/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="text" defaultValue = {email} onChange = {(e) => (setEmail(e.target.value))}/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Occupation</Form.Label>
-                            <Form.Control type="text" defaultValue = {occupation} onChange = {(e) => (setOccupation(e.target.value))}/>
-                            </Form.Group>
-                            </Form>       
-                        </Col>
-
-                        <Col>
-                            <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>About Me</Form.Label>
-                            <Form.Control as="textarea" rows={3} placeholder="Tell me about yourself." defaultValue = {bio} onChange = {(e) => (setBio(e.target.value))}/>
-                            </Form.Group>
-                            </Form>
-                        </Col>
-
-                        <Col>
-                            <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Skills</Form.Label>
-                            <Form.Control as="textarea" rows={3} placeholder="Enter your skills and separate with commas. Ex: (c++, javascript, react)" defaultValue = {skills} onChange = {(e) => (setSkills(e.target.value))}/>
-                            </Form.Group>
-                            </Form>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col></Col>
-                        <Col><Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Interest </Form.Label>
-                            <Form.Control as="textarea" rows={3} placeholder="Enter your interests and separate with commas. Ex: (fontend, design, applications)" defaultValue = {interests} onChange = {(e) => (setInterests(e.target.value))}/>
-                            </Form.Group>
-                            </Form></Col>
-
-                        <Col>
-                        <Form.Label>Links</Form.Label>
-                            {links.map((link) => {
-                                return (
-                                <Form>
-                                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                
-                                <Form.Control type="text" defaultValue = {link.type} onChange = {(e) => (setLinks(e.target.value))}/>
-                                <Form.Control type="text" defaultValue = {link.link} onChange = {(e) => (setLinks(e.target.value))}/>
-                                </Form.Group>
-                                </Form>
-
-                                );
-                            })
-                        }
-                        </Col>
-                    </Row>
-                        <Form.Group className="mb-3" controlId="submitform">
-                            <Button variant="outline-info" type="submit" onClick={editProfile}>
-                                Update
-                            </Button> 
-                        </Form.Group>
-                    </div>
-                )
-            }
-
-
-        </Container>     
-        {id !== username && <Rating firstName={firstName} userId={id} /> }
-        </section>
+  useEffect(() => {
+    if (otherProfileProjectMemberships?.length) {
+      const result = JSON.parse(
+        localStorage.getItem('loggedInUserMemberships')
+      ).filter((o1) =>
+        otherProfileProjectMemberships.some(
+          (o2) => o1.projectId === o2.projectId
+        )
       );
+      if (result?.length) {
+        setIsOtherMemberProjectIdInGroup(true);
+      } else {
+        setIsOtherMemberProjectIdInGroup(false);
+      }
+    }
+  }, [otherProfileProjectMemberships?.length]);
 
+  const editProfile = async (e) => {
+    e.preventDefault();
+    setError(false);
+    console.log(canEdit);
+    if (canEdit == true) {
+      const putData = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        bio: bio,
+        occupation: occupation,
+        links: links,
+        interests: interests.split(','),
+        skills: skills.split(','),
+      };
+      try {
+        const response = await axiosInstance.put(`/users/${id}`, putData, {
+          headers: { authorization: 'Bearer ' + authorization },
+        });
+
+        alert('Profile was edited successfully!');
+        console.log(response);
+        console.log(id);
+      } catch (err) {
+        console.log(err);
+        console.log(err.response);
+        setErrorMessage(err.response.data.msg);
+        setError(true);
+      }
+    }
+  };
+
+  const skills2 = skills.split(',');
+  const interests2 = interests.split(',');
+
+  return (
+    <section id='header'>
+      <Container>
+        {!canEdit && (
+          <div>
+            <Row>
+              <Carousel fade>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='First slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>
+                      Welcome to {firstName} {lastName}'s Profile!
+                    </h1>
+                    <p>
+                      {firstName} {lastName} is a(n): {occupation}
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='Second slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>About Me</h1>
+                    <p>{bio}</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='Third slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>Contact Me</h1>
+                    <p>{email}</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              </Carousel>
+            </Row>
+            <Row>
+              <Col xs lg='2'>
+                <h1 className='text-info'>Skills</h1>
+                {skills2.map((skill) => {
+                  return (
+                    <ListGroup>
+                      <ListGroup.Item>{skill}</ListGroup.Item>
+                    </ListGroup>
+                  );
+                })}
+
+                <h1 className='text-info'>Interests</h1>
+                {interests2.map((interest) => {
+                  return (
+                    <ListGroup>
+                      <ListGroup.Item>{interest}</ListGroup.Item>
+                    </ListGroup>
+                  );
+                })}
+              </Col>
+              <Col md='auto'>
+                <h1 className='text-info'>Links</h1>
+                {links.map((link) => {
+                  return (
+                    <Card style={{ width: '18rem' }}>
+                      <Card.Body>
+                        <Card.Title>{link.type}</Card.Title>
+                        <Card.Link className='mb-2 text-muted' href={link.link}>
+                          {link.link}
+                        </Card.Link>
+                      </Card.Body>
+                    </Card>
+                  );
+                })}
+              </Col>
+              <Col md='auto'>
+                <h1 className='text-info'>Project Following</h1>
+                <div className='project-following-scroll'>
+                  {projectFollowings.map((projectFollowing) => {
+                    return (
+                      <Card>
+                        <Card.Body>
+                          <Card.Title>
+                            {projectFollowing.projectName}
+                          </Card.Title>
+                          <Card.Text>
+                            The project id is: {projectFollowing.projectId}
+                          </Card.Text>
+                          <Card.Link
+                            href={'/projects/' + projectFollowing.projectId}
+                          >
+                            Link to project
+                          </Card.Link>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Col>
+              <Col xs lg='4'>
+                <h1 className='text-info'>Project Membership</h1>
+                <div className='project-membership-scroll'>
+                  {projectMemberships.map((projectMembership) => {
+                    return (
+                      <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                          <Card.Title>
+                            {projectMembership.projectName}
+                          </Card.Title>
+                          <Card.Subtitle className='mb-2 text-muted'>
+                            {projectMembership.projectStatus}
+                          </Card.Subtitle>
+                          <Card.Text>
+                            The project id is: {projectMembership.projectId}
+                          </Card.Text>
+                          <Card.Link
+                            href={'/projects/' + projectMembership.projectId}
+                          >
+                            Link to project
+                          </Card.Link>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        )}
+        {canEdit && (
+          <div>
+            <Row>
+              <Carousel fade>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='First slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>
+                      Welcome to {firstName} {lastName}'s Profile!
+                    </h1>
+                    <p>
+                      {firstName} {lastName} is a(n): {occupation}
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='Second slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>About Me</h1>
+                    <p>{bio}</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={gradientPic}
+                    style={{ height: '200px', width: '100px' }}
+                    alt='Third slide'
+                  />
+                  <Carousel.Caption>
+                    <h1>Contact Me</h1>
+                    <p>{email}</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              </Carousel>
+            </Row>
+            <Row>
+              <Col xs lg='2'>
+                <h1 className='text-info'>Skills</h1>
+                <div className='skills-scroll'>
+                  {skills2.map((skill) => {
+                    return (
+                      <ListGroup>
+                        <ListGroup.Item>{skill}</ListGroup.Item>
+                      </ListGroup>
+                    );
+                  })}
+                </div>
+                <h1 className='text-info'>Interests</h1>
+                <div className='interest-scroll'>
+                  {interests2.map((interest) => {
+                    return (
+                      <ListGroup>
+                        <ListGroup.Item>{interest}</ListGroup.Item>
+                      </ListGroup>
+                    );
+                  })}
+                </div>
+              </Col>
+              <Col md='auto'>
+                <h1 className='text-info'>Links</h1>
+                {links.map((link) => {
+                  return (
+                    <Card style={{ width: '18rem' }}>
+                      <Card.Body>
+                        <Card.Title>{link.type}</Card.Title>
+                        <Card.Link className='mb-2 text-muted' href={link.link}>
+                          {link.link}
+                        </Card.Link>
+                      </Card.Body>
+                    </Card>
+                  );
+                })}
+              </Col>
+              <Col md='auto'>
+                <h1 className='text-info'>Project Following</h1>
+                <div className='project-following-scroll'>
+                  {projectFollowings.map((projectFollowing) => {
+                    return (
+                      <Card>
+                        <Card.Body>
+                          <Card.Title>
+                            {projectFollowing.projectName}
+                          </Card.Title>
+                          <Card.Text>
+                            The project id is: {projectFollowing.projectId}
+                          </Card.Text>
+                          <Card.Link
+                            href={'/projects/' + projectFollowing.projectId}
+                          >
+                            Link to project
+                          </Card.Link>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Col>
+              <Col xs lg='4'>
+                <h1 className='text-info'>Project Membership</h1>
+                <div className='project-membership-scroll'>
+                  {projectMemberships.map((projectMembership) => {
+                    return (
+                      <Card style={{ width: '18rem' }}>
+                        <Card.Body>
+                          <Card.Title>
+                            {projectMembership.projectName}
+                          </Card.Title>
+                          <Card.Subtitle className='mb-2 text-muted'>
+                            {projectMembership.projectStatus}
+                          </Card.Subtitle>
+                          <Card.Text>
+                            The project id is: {projectMembership.projectId}
+                          </Card.Text>
+                          <Card.Link
+                            href={'/projects/' + projectMembership.projectId}
+                          >
+                            Link to project
+                          </Card.Link>
+                        </Card.Body>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Alert variant='info'>
+                <Alert.Heading>Hey, nice to see you!</Alert.Heading>
+                <p>
+                  Below you can edit the details for your profile and above
+                  this, you can see how your profile will look to others.
+                </p>
+              </Alert>
+            </Row>
+            <Row>
+              <Col>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                      type='text'
+                      defaultValue={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      type='text'
+                      defaultValue={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className='mb-3'
+                    controlId='exampleForm.ControlInput1'
+                  >
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type='text'
+                      defaultValue={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className='mb-3'
+                    controlId='exampleForm.ControlInput1'
+                  >
+                    <Form.Label>Occupation</Form.Label>
+                    <Form.Control
+                      type='text'
+                      defaultValue={occupation}
+                      onChange={(e) => setOccupation(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+
+              <Col>
+                <Form>
+                  <Form.Group
+                    className='mb-3'
+                    controlId='exampleForm.ControlTextarea1'
+                  >
+                    <Form.Label>About Me</Form.Label>
+                    <Form.Control
+                      as='textarea'
+                      rows={3}
+                      placeholder='Tell me about yourself.'
+                      defaultValue={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+
+              <Col>
+                <Form>
+                  <Form.Group
+                    className='mb-3'
+                    controlId='exampleForm.ControlTextarea1'
+                  >
+                    <Form.Label>Skills</Form.Label>
+                    <Form.Control
+                      as='textarea'
+                      rows={3}
+                      placeholder='Enter your skills and separate with commas. Ex: (c++, javascript, react)'
+                      defaultValue={skills}
+                      onChange={(e) => setSkills(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col></Col>
+              <Col>
+                <Form>
+                  <Form.Group
+                    className='mb-3'
+                    controlId='exampleForm.ControlTextarea1'
+                  >
+                    <Form.Label>Interest </Form.Label>
+                    <Form.Control
+                      as='textarea'
+                      rows={3}
+                      placeholder='Enter your interests and separate with commas. Ex: (fontend, design, applications)'
+                      defaultValue={interests}
+                      onChange={(e) => setInterests(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form>
+              </Col>
+
+              <Col>
+                <Form.Label>Links</Form.Label>
+                {links.map((link) => {
+                  return (
+                    <Form>
+                      <Form.Group
+                        className='mb-3'
+                        controlId='exampleForm.ControlTextarea1'
+                      >
+                        <Form.Control
+                          type='text'
+                          defaultValue={link.type}
+                          onChange={(e) => setLinks(e.target.value)}
+                        />
+                        <Form.Control
+                          type='text'
+                          defaultValue={link.link}
+                          onChange={(e) => setLinks(e.target.value)}
+                        />
+                      </Form.Group>
+                    </Form>
+                  );
+                })}
+              </Col>
+            </Row>
+            <Form.Group className='mb-3' controlId='submitform'>
+              <Button
+                variant='outline-info'
+                type='submit'
+                onClick={editProfile}
+              >
+                Update
+              </Button>
+            </Form.Group>
+          </div>
+        )}
+      </Container>
+      {id !== username && isOtherMemberProjectIdInGroup && (
+        <Rating firstName={firstName} userId={id} reviews={reviews}  canReview={canReview}/>
+      )}
+    </section>
+  );
 }
-
-
-
-
-
-                

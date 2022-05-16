@@ -21,9 +21,7 @@ const Features = () => {
           <BsFillBookmarkStarFill color="navy" size={30} />
           <h2>Features</h2>
           <p className="u-text-small">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique
-            itaque veniam laudantium, quam quas dolor tempora eligendi officia
-            sequi. Iusto.
+            These are some of the key features that BudCode has to offer for people looking to collaborate!
           </p>
         </div>
         <div className="features-content">

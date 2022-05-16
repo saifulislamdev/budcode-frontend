@@ -150,6 +150,8 @@ export default function ProjectPage() {
                 skills: skills.split(','),
                 tags: tags.split(','),
                 members: members.split(','),
+                canReview: status === 'Complete'?true:false
+
              
             };
             try {

@@ -27,6 +27,17 @@
   gap: 24px;
   flex-direction: column;
   flex-grow: 1;
+  
+}
+.only-project-cards{
+  max-height: 800px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* Internet Explorer 10+*/
+  scrollbar-width: none;  /* Firefox */
+}
+
+.only-project-cards::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 
 .feed-content .all-projects-list .project-list-heading-container {
@@ -112,3 +123,5 @@
 .form-element {
   padding: 8px 0;
 }
+
+
