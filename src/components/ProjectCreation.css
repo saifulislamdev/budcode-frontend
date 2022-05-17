@@ -64,4 +64,14 @@
 	justify-content: flex-end;
 	padding: 0 10vw;
   }
-  
+ 
+  .grey-text-name {
+	  font-size: 14px;
+	  color: gray;
+  }
+
+  .grey-text-name:after {
+	content: " *";
+	color: red;
+  }
+ 

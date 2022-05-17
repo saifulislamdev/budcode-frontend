@@ -11,7 +11,7 @@ function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, 
     return (
         <Modal show={show} onHide={onHide} size="md" centered>
             <Modal.Header>
-                <Modal.Title id="contained-modal-title-vcenter">Add/Remove Links for the Project</Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter">Add/Remove Links For Your Project</Modal.Title>
                 <Button className="btn btn-primary" onClick={handleAddLink}>
                     Add
                 </Button>
@@ -160,46 +160,50 @@ export default function ProjectCreation() {
                 <div className="name-skills-container" style={{ flex: 1 }}>
                     <div className="form-group">
                         <label htmlFor="name">Project Title</label>
+                        <h2 className = "grey-text-name">Enter Project Title</h2>
                         <input
                             className="form-control"
                             id="name"
                             type="text"
-                            placeholder="Enter Project Title"
+                            placeholder="e.g. BudCode, Jumpman, Discord"
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className="form-group" style={{ height: '100%' }}>
                         <label htmlFor="skills">Skills</label>
+                        <h2 className = "grey-text-name">Enter Project Skills and separate with commas</h2>
                         <textarea
                             className="form-control"
                             style={{ height: '100%' }}
                             id="skills"
                             type="text"
-                            placeholder="Enter Project Skills and separate with commas. Ex:( c++, javascript, react )"
+                            placeholder="e.g. c++, javascript, react "
                             onChange={(e) => setSkills(e.target.value)}
                         />
                     </div>
                 </div>
                 <div className="form-group" style={{ flex: 1 }}>
                     <label htmlFor="description">Description</label>
+                    <h2 className = "grey-text-name">Enter Project Description</h2>
                     <textarea
                         className="form-control"
                         id="description"
                         style={{ height: '100%' }}
                         type="text"
-                        placeholder="Enter Project Description"
+                        placeholder="e.g. This project is about..."
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
                 <div className="tags-links-container" style={{ flex: 1 }}>
                     <div className="form-group" style={{ height: '100%' }}>
                         <label htmlFor="tags">Tags</label>
+                        <h2 className = "grey-text-name">Enter Project Tags and separate with commas.</h2>
                         <textarea
                             className="form-control"
                             style={{ height: '100%' }}
                             id="tags"
                             type="text"
-                            placeholder="Enter Project Tags and separate with commas. Ex:( Web Programming, Game Design )"
+                            placeholder="e.g. Web Programming, Game Design "
                             onChange={(e) => setTags(e.target.value)}
                         />
                     </div>
