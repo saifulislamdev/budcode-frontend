@@ -92,6 +92,7 @@ export default function Feed() {
         <div className='feed-fields'>
           <div className='project-input-fields'>
             <div className='form-group form-element'>
+              <h2 className='grey-text-feed'>Choose A Project To Post An Update!</h2>
               <select
                 name='project'
                 onChange={handleInputChange}

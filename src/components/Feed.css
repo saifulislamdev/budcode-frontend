@@ -120,4 +120,7 @@
   padding: 8px 0;
 }
 
-
+.grey-text-feed{
+  font-size: 14px;
+  color: grey;
+}
