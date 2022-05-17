@@ -85,13 +85,13 @@ export default function Rating({ firstName, userId, reviews,canReview }) {
         disabled={!canReview}
         style={styles.textarea}
         onChange={handleInputChange}
-        placeholder='Write your experience!'
+        placeholder={`Write about your experience with ${firstName}!`}
       />
 
       <button onClick={handleSubmitRating} style={styles.button} disabled={!canReview}>
         Submit
       </button>
-      <h1 className='text-info'>Previous Reviews</h1>
+       <h1 className='text-info'>Previous Reviews</h1>
       <div className='project-following-scroll'>
         {reviews.map((review) => {
           return (

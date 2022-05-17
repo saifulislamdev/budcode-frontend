@@ -146,7 +146,7 @@ export default function Search() {
                         value={searchQuery}
                         className="form-control"
                         id="search"
-                        placeholder="Search..."
+                        placeholder="What would you like to search for?"
                         onChange={({ target: { value } }) => setSearchQuery(value)}
                     />
                     <button className="btn btn-primary" onClick={handleSearch}>
@@ -185,7 +185,7 @@ export default function Search() {
                                             <h5>{creator}</h5>
                                         </div>
                                         <div className="custom-card-body">
-                                            <h4>{description}</h4>
+                                            <h4 className = "custom-body-text">{description}</h4>
                                         </div>
                                         <div className="custom-card-footer">
                                             <div className="skill-tags-detail">

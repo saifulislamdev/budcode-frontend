@@ -11,7 +11,7 @@
 }
 
 .feed-content .feed-fields .project-input-fields {
-  background-color: #E0E0E0;
+  background-color: whitesmoke;
   padding: 16px;
   display: flex;
   align-items: center;
@@ -32,13 +32,9 @@
 .only-project-cards{
   max-height: 800px;
   overflow-y: scroll;
-  -ms-overflow-style: none;  /* Internet Explorer 10+*/
-  scrollbar-width: none;  /* Firefox */
+  
 }
 
-.only-project-cards::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
-}
 
 .feed-content .all-projects-list .project-list-heading-container {
   display: flex;

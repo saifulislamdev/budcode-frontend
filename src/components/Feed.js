@@ -126,7 +126,7 @@ export default function Feed() {
                 name='body'
                 type='textarea'
                 className='form-control'
-                placeholder='Updates'
+                placeholder='Anything new about your project?'
                 value={updateInput.body}
                 onChange={handleInputChange}
               />

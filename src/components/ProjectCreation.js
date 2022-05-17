@@ -36,7 +36,7 @@ function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, 
                                     name="type"
                                     onChange={(e) => handleLinksChange(e, link.id)}
                                     type="text"
-                                    placeholder="Link Type"
+                                    placeholder="Type (e.g. Github, LinkedIn, etc.)"
                                 />
                             </div>
                             <div>
@@ -46,7 +46,7 @@ function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, 
                                     name="link"
                                     onChange={(e) => handleLinksChange(e, link.id)}
                                     type="text"
-                                    placeholder="Link URL"
+                                    placeholder="URL (e.g. https://www.google.com/)"
                                 />
                             </div>
                         </Form.Group>
