@@ -548,12 +548,27 @@ export default function ProfilePage() {
           </div>
         )}
       </Container>
-      <Rating
+      <div className='project-following-scroll'>
+      </div>
+      {id !== username &&<Rating
         firstName={firstName}
         userId={id}
         reviews={reviews}
         canReview={canReview}
-      />
+      />}
+        <div className = "review-body-style">
+          <h1 className='text-info'>Previous Reviews</h1>
+        {reviews.map((review) => {
+          return (
+            <Card >
+              <Card.Body>
+                <Card.Title>{review.subject}</Card.Title>
+                <Card.Text>{review.body}</Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+        </div>
     </section>
   );
 }
