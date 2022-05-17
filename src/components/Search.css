@@ -87,6 +87,7 @@
   column-gap: 16px;
 }
 
+
 .search-projects .project-card .custom-card-header .title-container span {
   padding: 4px;
   background-color: #28a745;
@@ -97,6 +98,12 @@
 
 .search-projects .project-card .custom-card-body {
   display: flex;
+  max-height: 70px;
+  overflow-y: hidden;
+}
+
+.custom-body-text {
+  font-size: 19px;
 }
 
 .search-projects .project-card .custom-card-footer {
@@ -105,4 +112,12 @@
 
 .search-projects .project-card .custom-card-footer .skill-tags-detail {
   flex: 1;
+  max-height: 90px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}
+
+.search-projects .project-card .custom-card-footer .skill-tags-detail::-webkit-scrollbar{
+  display: none;  /* Safari and Chrome */
 }
