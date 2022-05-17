@@ -38,18 +38,7 @@ export default function ProfilePage() {
   const [reviews, setReviews] = useState([]);
   const [projectFollowings, setProjectFollowings] = useState([]);
   const [projectMemberships, setProjectMemberships] = useState([]);
-  const [canReview,setCanReview] = useState(false);
-  const [isProfileOfLoggedInUser, setIsProfileOfLoggedInUser] = useState(
-    username === id
-  );
-  const [otherProfileProjectMemberships, setOtherProfileProjectMemberships] =
-    useState([]);
-  const [isOtherMemberProjectIdInGroup, setIsOtherMemberProjectIdInGroup] =
-    useState(false);
-
-  useEffect(() => {
-    setIsProfileOfLoggedInUser(username === id);
-  }, [id]);
+  const [canReview, setCanReview] = useState(false);
 
   console.log('projectFollowings', projectFollowings);
 
@@ -60,53 +49,33 @@ export default function ProfilePage() {
       })
       .then((response) => {
         const {
-          firstName,
-          lastName,
-          gender,
-          email,
           bio,
-          occupation,
-          links,
-          interests,
-          skills,
-          reviews,
+          canEdit,
           canReview,
+          email,
+          firstName,
+          interests,
+          lastName,
+          links,
+          occupation,
           projectFollowings,
           projectMemberships,
+          reviews,
+          skills,
         } = response.data;
-        if (isProfileOfLoggedInUser) {
-          setCanEdit(canEdit);
-          setFirstName(firstName);
-          setLastName(lastName);
-          setEmail(email);
-          setBio(bio);
-          setOccupation(occupation);
-          setLinks(links);
-          setReviews(reviews);
-          setSkills(skills.toString());
-          setInterests(interests.toString());
-          setProjectFollowings(projectFollowings);
-          setProjectMemberships(projectMemberships);
-          localStorage.setItem(
-            'loggedInUserMemberships',
-            JSON.stringify(projectMemberships)
-          );
-        } else {
-          setBio(bio);
-          setLinks(links);
-          setEmail(email);
-          setReviews(reviews);
-          setCanEdit(canEdit);
-          setLastName(lastName);
-          setFirstName(firstName);
-          setOccupation(occupation);
-          setSkills(skills.toString());
-          setInterests(interests.toString());
-          setProjectFollowings(projectFollowings);
-          setProjectMemberships(projectMemberships);
-          setCanReview(canReview)
-          setOtherProfileProjectMemberships(projectMemberships);
-        }
+        setBio(bio);
+        setCanEdit(canEdit);
+        setCanReview(canReview);
+        setEmail(email);
+        setFirstName(firstName);
+        setInterests(interests.toString());
+        setLastName(lastName);
+        setLinks(links);
+        setOccupation(occupation);
+        setProjectFollowings(projectFollowings);
+        setProjectMemberships(projectMemberships);
+        setReviews(reviews);
+        setSkills(skills.toString());
       })
       .catch((err) => {
         console.log(err);
@@ -115,34 +84,10 @@ export default function ProfilePage() {
         setError(true);
       });
   }, []);
+
   useEffect(() => {
     getUser(id);
   }, []);
-
-  const getOtherPersonProfileDetails = useCallback((otherPersonUserName) => {
-    getUser(otherPersonUserName);
-  }, []);
-
-  useEffect(() => {
-    !isProfileOfLoggedInUser && getOtherPersonProfileDetails(id);
-  }, []);
-
-  useEffect(() => {
-    if (otherProfileProjectMemberships?.length) {
-      const result = JSON.parse(
-        localStorage.getItem('loggedInUserMemberships')
-      ).filter((o1) =>
-        otherProfileProjectMemberships.some(
-          (o2) => o1.projectId === o2.projectId
-        )
-      );
-      if (result?.length) {
-        setIsOtherMemberProjectIdInGroup(true);
-      } else {
-        setIsOtherMemberProjectIdInGroup(false);
-      }
-    }
-  }, [otherProfileProjectMemberships?.length]);
 
   const editProfile = async (e) => {
     e.preventDefault();
@@ -598,8 +543,13 @@ export default function ProfilePage() {
           </div>
         )}
       </Container>
-      {id !== username && isOtherMemberProjectIdInGroup && (
-        <Rating firstName={firstName} userId={id} reviews={reviews}  canReview={canReview}/>
+      {canReview && (
+        <Rating
+          firstName={firstName}
+          userId={id}
+          reviews={reviews}
+          canReview={canReview}
+        />
       )}
     </section>
   );
