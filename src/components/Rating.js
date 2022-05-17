@@ -10,7 +10,7 @@ const colors = {
   grey: '#a9a9a9',
 };
 
-export default function Rating({ firstName, userId, reviews,canReview }) {
+export default function Rating({ firstName, userId,reviews, canReview }) {
   const [rating, setRating] = useState({ subject: '', body: '' });
   const { authorization } = useContext(UserContext);
 
@@ -48,7 +48,7 @@ export default function Rating({ firstName, userId, reviews,canReview }) {
 
   return (
     <div style={styles.container}>
-      <h2> {`Reviews of ${firstName}`} </h2>
+      <h2> {`Review ${firstName}`} </h2>
       {reviews.length ? <h4> {`Reviewed by  ${JSON.parse(window.localStorage.getItem('username'))}`} </h4>:<></>}
       {/* <div style={styles.stars}>
         {stars.map((_, index) => {
@@ -91,19 +91,8 @@ export default function Rating({ firstName, userId, reviews,canReview }) {
       <button onClick={handleSubmitRating} style={styles.button} disabled={!canReview}>
         Submit
       </button>
-       <h1 className='text-info'>Previous Reviews</h1>
-      <div className='project-following-scroll'>
-        {reviews.map((review) => {
-          return (
-            <Card >
-              <Card.Body>
-                <Card.Title>{review.subject}</Card.Title>
-                <Card.Text>{review.body}</Card.Text>
-              </Card.Body>
-            </Card>
-          );
-        })}
-      </div>
+       
+     
     </div>
   );
 }
