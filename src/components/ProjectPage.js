@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { join } from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import {motion} from 'framer-motion';
 
 
 
@@ -232,6 +233,8 @@ export default function ProjectPage() {
     const skills2 = skills.split(',');
     const tags2 = tags.split(',');
     const members2 = members.split(',');
+
+    const [isOpen, setIsOpen] = useState(false);
   
     const target = useRef(null);
     console.log('members', members);
@@ -274,105 +277,8 @@ export default function ProjectPage() {
                             </Button>
                             </Modal.Footer>
                         </Modal>
-                    <Row>
-                        <Col></Col>
-                        <Col>
-                        <h2 className="text-info">Creator:</h2>
-                        <h4>{creatorUserName}</h4>
-                        </Col>
-                        <Col>
-                        <h2 className="text-info">Created:</h2>
-                        <h4>{createdAt.substring(0,10)}</h4>
-                        </Col>
-                        <Col>
-                        <h2 className="text-info"># of Followers:</h2>
-                        <h4>{numOfFollowers}</h4>
-                        </Col>
-                        <Col></Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                        <h1 className="text-info">Status</h1>
-                        <Badge pill bg="success">
-                            {status}
-                        </Badge>
-                        </Col>
-                        <Col>
-                        <h1 className="text-info">Requirements</h1>
-                        <div className="skills-scroll">
-                            {skills2.map((skill) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{skill}</ListGroup.Item>
-                                    </ListGroup>
-                                );
+                    
 
-                            })
-                            }  
-                            </div>
-                        </Col>
-                        <Col>
-                        <h1 className="text-info">Tags</h1>
-                        <div className="tags-scroll">
-                            {tags2.map((tag) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{tag}</ListGroup.Item>
-                                    </ListGroup>
-                                );
-
-                            })
-                            }  
-                            </div>
-                        </Col>
-                        <Col>
-                        <h1 className="text-info">Links</h1>
-                        {links.map((link) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{link.type}</Card.Title>
-                                        <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>    
-                                    </Card.Body>
-                                    </Card>
-                                );                                   
-                            })
-                            }
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col></Col>
-                        <Col>
-                        <h1 className="text-info">Members</h1>
-                        {membersWithJoinDates.map((member) => {
-                                return (
-                                    <Card style={{ width: '18rem' }}>
-                                    <Card.Body>
-                                        <Card.Title>{member.username}</Card.Title>
-                                        <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
-                                        <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
-                                    </Card.Body>
-                                    </Card>
-                                );                                   
-                            })
-                            }
-                        </Col>
-                        <Col>
-                        <h1 className="text-info">User Mutual Skills</h1>
-                        <div className="mutual-scroll">
-                            {userMutualSkills.map((userMutualSkill) => {
-                                return (
-                                    <ListGroup>
-                                        <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
-                                    </ListGroup>
-                                );
-
-                            })
-                            }  
-                            </div>
-                        </Col>
-                        <Col></Col>
-                    </Row>
                     <Row>
                     <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
                         Contact Me:
@@ -381,6 +287,108 @@ export default function ProjectPage() {
                         {creatorEmail}
                         </Typography>
                     </Row>
+
+                    <div className="transition-div">
+                        <motion.div transition={{layout: {duration: 1}}} 
+                        layout
+                        onClick={() => setIsOpen(!isOpen)} 
+                        className='transition-card'
+                        style={{borderRadius: '1rem', boxShadow: '0px 10px 30px rgba(0,0,0, 0.5)'}}>
+                            <motion.h2 layout="position">Project Information</motion.h2>
+                            {isOpen && (
+                            <motion.div 
+                            initial={{opacity: 0}} 
+                            animate={{opacity: 1}} 
+                            transition={{duration: 1}}
+                            className='expand'>
+                                <h4 className="display-inline-h4">Creator:</h4> <h5>{creatorUserName}</h5>
+                                <h4 className="display-inline-h4">Created:</h4> <h5>{createdAt.substring(0,10)}</h5>
+                                <h4 className="display-inline-h4"># of Followers</h4> <h5>{numOfFollowers}</h5>
+                                <h4 className="display-inline-h4">Status:</h4> <Badge pill bg="success">
+                            {status}
+                        </Badge>
+                                
+                            </motion.div>
+                            )}
+                        </motion.div>
+                    </div>
+
+                    <h1 className="text-info">Requirements</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {skills2.map(skill => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{skill}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <h1 className="text-info">Tags</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {tags2.map(tag => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{tag}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <h1 className="text-info">Members</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {membersWithJoinDates.map(member => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <Card style={{ width: '18rem' }}>
+                                <Card.Body>
+                                    <Card.Title>{member.username}</Card.Title>
+                                    <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
+                                    <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+
+                    <h1 className='text-info'>Links</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {links.map(link => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <Card style={{ width: '18rem' }}>
+                            <Card.Body>
+                                <Card.Title>{link.type}</Card.Title>
+                                <Card.Link className='mb-2 text-muted' href={link.link}>
+                                {link.link}
+                                </Card.Link>
+                            </Card.Body>
+                            </Card>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <h1 className="text-info">User Mutual Skills</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {userMutualSkills.map(userMutualSkill => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <div className='alert-project'>
                     <Row>
                         <Alert variant="info">
                             <Alert.Heading>Hey, nice to see you!</Alert.Heading>
@@ -389,7 +397,7 @@ export default function ProjectPage() {
                             </p>                 
                         </Alert>
                     </Row>
-                     
+                    </div>
                     <Row>               
                         <Col>  
                         </Col>
@@ -409,11 +417,14 @@ export default function ProjectPage() {
                             <Form>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} defaultValue = {description} onChange = {(e) => (setDescription(e.target.value))}/>
+                            <Form.Control as="textarea" rows={5} defaultValue = {description} onChange = {(e) => (setDescription(e.target.value))}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Members</Form.Label>
-                            <Form.Control as="textarea" rows={membersWithJoinDates.length} defaultValue = {members} onChange = {(e) => (setMembers(e.target.value))}/>
+                            <Form.Control as="textarea" rows={2} defaultValue = {members} onChange = {(e) => (setMembers(e.target.value))}/>
+                            <Form.Text className="text-muted">
+                            Enter project members and separate with commas. Ex: (John, Jill, Joe)
+                            </Form.Text>
                             </Form.Group>
                             </Form>
                         </Col>
@@ -422,6 +433,9 @@ export default function ProjectPage() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Requirements</Form.Label>
                             <Form.Control as="textarea" rows={3} defaultValue = {skills} onChange = {(e) => (setSkills(e.target.value))}/>
+                            <Form.Text className="text-muted">
+                            Enter your project requirements and separate with commas. Ex: (c++, javascript, react)
+                            </Form.Text>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Status</Form.Label>
@@ -434,6 +448,9 @@ export default function ProjectPage() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Project Tags</Form.Label>
                             <Form.Control as="textarea" rows={3} defaultValue = {tags} onChange = {(e) => (setTags(e.target.value))}/>
+                            <Form.Text className="text-muted">
+                            Enter your tags and separate with commas. Ex: (fontend, design, applications)
+                            </Form.Text>
                             </Form.Group>
                             <Form.Label>Links</Form.Label>
                             {links.map((link) => {
@@ -478,25 +495,25 @@ export default function ProjectPage() {
                     {isValidUser && canUserFollow && canUserRequest && !hasUserRequested && (
                             <Form.Group className='button-form'>
                             <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
-                            <Button variant="outline-info" type="submit" onClick={handleShow}>Interested</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow}>Request</Button>{' '}
                             </Form.Group>
                     )}
                     {isValidUser && !canUserFollow && canUserRequest && !hasUserRequested && (
                             <Form.Group className='button-form'>
                             <Button variant="outline-info" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
-                            <Button variant="outline-info" type="submit" onClick={handleShow}>Interested</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow}>Request</Button>{' '}
                             </Form.Group>
                     )}
                     {isValidUser && canUserFollow && !canUserRequest && hasUserRequested && (
                             <Form.Group className='button-form'>
                             <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
-                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
                             </Form.Group>
                     )}
                     {!isValidUser && (
                             <Form.Group className='button-form'>
                             <Button variant="secondary" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
-                            <Button variant="secondary" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
+                            <Button variant="secondary" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
                             </Form.Group>
                     )} 
 
@@ -519,117 +536,118 @@ export default function ProjectPage() {
                              Close
                          </Button>
                          <Button variant="primary" onClick={requestJoinProject}>
-                             Request
+                             Submit
                          </Button>
                          </Modal.Footer>
                      </Modal>
-                 <Row>
-                     <Col></Col>
-                     <Col>
-                     <h2 className="text-info">Creator:</h2>
-                     <h4>{creatorUserName}</h4>
-                     </Col>
-                     <Col>
-                     <h2 className="text-info">Created:</h2>
-                     <h4>{createdAt.substring(0,10)}</h4>
-                     </Col>
-                     <Col>
-                     <h2 className="text-info"># of Followers:</h2>
-                     <h4>{numOfFollowers}</h4>
-                     </Col>
-                     <Col></Col>
-                 </Row>
-                 <Row>
-                     <Col>
-                     <h1 className="text-info">Status</h1>
-                     <Badge pill bg="success">
-                         {status}
-                     </Badge>
-                     </Col>
-                     <Col>
-                     <h1 className="text-info">Requirements</h1>
-                     <div className="skills-scroll">
-                         {skills2.map((skill) => {
-                             return (
-                                 <ListGroup>
-                                     <ListGroup.Item>{skill}</ListGroup.Item>
-                                 </ListGroup>
-                             );
+                     <Row>
+                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+                        Contact Me:
+                        </Typography>
+                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                        {creatorEmail}
+                        </Typography>
+                    </Row>
 
-                         })
-                         }  
-                         </div>
-                     </Col>
-                     <Col>
-                     <h1 className="text-info">Tags</h1>
-                     <div className="tags-scroll">
-                         {tags2.map((tag) => {
-                             return (
-                                 <ListGroup>
-                                     <ListGroup.Item>{tag}</ListGroup.Item>
-                                 </ListGroup>
-                             );
+                    <div className="transition-div">
+                        <motion.div transition={{layout: {duration: 1}}} 
+                        layout
+                        onClick={() => setIsOpen(!isOpen)} 
+                        className='transition-card'
+                        style={{borderRadius: '1rem', boxShadow: '0px 10px 30px rgba(0,0,0, 0.5)'}}>
+                            <motion.h2 layout="position">Project Information</motion.h2>
+                            {isOpen && (
+                            <motion.div 
+                            initial={{opacity: 0}} 
+                            animate={{opacity: 1}} 
+                            transition={{duration: 1}}
+                            className='expand'>
+                                <h4 className="display-inline-h4">Creator:</h4> <h5>{creatorUserName}</h5>
+                                <h4 className="display-inline-h4">Created:</h4> <h5>{createdAt.substring(0,10)}</h5>
+                                <h4 className="display-inline-h4"># of Followers</h4> <h5>{numOfFollowers}</h5>
+                                <h4 className="display-inline-h4">Status:</h4> <Badge pill bg="success">
+                            {status}
+                        </Badge>
+                                
+                            </motion.div>
+                            )}
+                        </motion.div>
+                    </div>
 
-                         })
-                         }  
-                         </div>
-                     </Col>
-                     <Col>
-                     <h1 className="text-info">Links</h1>
-                     {links.map((link) => {
-                             return (
-                                 <Card style={{ width: '18rem' }}>
-                                 <Card.Body>
-                                     <Card.Title>{link.type}</Card.Title>
-                                     <Card.Link className="mb-2 text-muted" href={link.link}>{link.link}</Card.Link>    
-                                 </Card.Body>
-                                 </Card>
-                             );                                   
-                         })
-                         }
-                     </Col>
-                 </Row>
-                 <Row>
-                     <Col></Col>
-                     <Col>
-                     <h1 className="text-info">Members</h1>
-                     {membersWithJoinDates.map((member) => {
-                             return (
-                                 <Card style={{ width: '18rem' }}>
-                                 <Card.Body>
-                                     <Card.Title>{member.username}</Card.Title>
-                                     <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
-                                     <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
-                                 </Card.Body>
-                                 </Card>
-                             );                                   
-                         })
-                         }
-                     </Col>
-                     <Col>
-                     <h1 className="text-info">User Mutual Skills</h1>
-                     <div className="mutual-scroll">
-                         {userMutualSkills.map((userMutualSkill) => {
-                             return (
-                                 <ListGroup>
-                                     <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
-                                 </ListGroup>
-                             );
+                    <h1 className="text-info">Requirements</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {skills2.map(skill => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{skill}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
 
-                         })
-                         }  
-                         </div>
-                     </Col>
-                     <Col></Col>
-                 </Row>
-                 <Row>
-                 <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
-                     Contact Me:
-                     </Typography>
-                     <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                     {creatorEmail}
-                     </Typography>
-                 </Row>              
+                    <h1 className="text-info">Tags</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {tags2.map(tag => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{tag}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <h1 className="text-info">Members</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {membersWithJoinDates.map(member => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <Card style={{ width: '18rem' }}>
+                                <Card.Body>
+                                    <Card.Title>{member.username}</Card.Title>
+                                    <Card.Text>Joined: {member.joinedAt.substring(0,10)}</Card.Text>
+                                    <Card.Link className="mb-2 text-muted" href={"/users/" + member.username}>Link to Profile</Card.Link>    
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+
+                    <h1 className='text-info'>Links</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {links.map(link => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <Card style={{ width: '18rem' }}>
+                            <Card.Body>
+                                <Card.Title>{link.type}</Card.Title>
+                                <Card.Link className='mb-2 text-muted' href={link.link}>
+                                {link.link}
+                                </Card.Link>
+                            </Card.Body>
+                            </Card>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
+
+                    <h1 className="text-info">User Mutual Skills</h1>
+                    <Row xs={1} md={5} className="g-4">
+                    {userMutualSkills.map(userMutualSkill => ( 
+                        Array.from({ length: 1 }).map((_, idx) => (
+                        <Col>     
+                            <ListGroup>
+                                <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        ))  
+                    ))}
+                    </Row>
                     {error ? (
                                 <p style={{ color: 'red' }}>
                                     {errorMessage}
@@ -642,4 +660,3 @@ export default function ProjectPage() {
     );
 }
 
-/*<Form.Label>Date Joined:</Form.Label><Form.Control type="text" defaultValue = {member.joinedAt.substring(0,10)} readOnly/> */
