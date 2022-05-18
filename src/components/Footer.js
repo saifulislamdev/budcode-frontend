@@ -13,37 +13,16 @@ const Footer = () => {
     <section id="footer">
       <div className="container footer">
         <div className="footer-box">
-          <h4>Useful Links</h4>
+          <h4 className = "github-links">Github Links</h4>
           <div className="footer-links">
-            <a href="#">&bull; Support</a>
+            <a href="https://github.com/abdulimtiaz">&bull; Abdul Imtiaz</a>
+            <a href="https://github.com/anvinhtr">&bull; Anvinh Troung</a>
+            <a href="https://github.com/saifulislamdev">&bull; Saiful Islam</a>
+            <a href="https://github.com/tufayel5">&bull; Tufayel Ahmed</a>
           </div>
         </div>
-        <div className="footer-box">
-          <h4>Support</h4>
-          <div className="footer-links">
-            <a href="#">&bull; Support</a>
-          </div>
-        </div>
-        <div className="footer-box">
-          <h4>Contact Us</h4>
-          <div className="footer-contact u-text-small">
-            <p>
-              <FaMapMarkerAlt /> &nbsp; Address:
-            </p>
-            <p>
-              <FaPhoneAlt /> &nbsp; Phone:
-            </p>
-            <p>
-              <FaFax /> &nbsp; Fax: 
-            </p>
-            <p>
-              <FaEnvelope /> &nbsp; Email: 
-            </p>
-            <p>
-              <FaGlobe /> &nbsp; Website: 
-            </p>
-          </div>
-        </div>
+        
+        
       </div>
     </section>
   );

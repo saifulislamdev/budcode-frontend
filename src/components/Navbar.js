@@ -14,8 +14,6 @@ const Navbar = () => {
   let navigate = useNavigate(); 
   const {setAuthorization} = useContext(UserContext);
 
-  
-
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };

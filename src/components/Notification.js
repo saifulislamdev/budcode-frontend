@@ -11,22 +11,20 @@ import { boolean } from 'yup';
 export default function Notification() {
     const [notifications, setNotifications] = useState([]);
     const [memberRequests, setMemberRequests] = useState([]);
-    
-
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-
     const {id} = useParams();
     let decision = false;
+    let navigate = useNavigate(); 
+
+    const username = JSON.parse(window.localStorage.getItem('username'));
 
     let { authorization } = useContext(UserContext);
     if (!authorization) {
         authorization = JSON.parse(window.localStorage.getItem('authorization'));
     }
 
-   
-    const getNotifications = async (id) => {
-        
+    const getNotifications = async (id) => {   
         await axiosInstance
             .get(`/notifications/user/${id}` , {
                 headers: {'authorization': 'Bearer ' + authorization}, 
@@ -34,8 +32,7 @@ export default function Notification() {
             )
             .then((response) => {
                 setNotifications(response.data.notifications);
-                //console.log(response);
-                
+                //console.log(response);     
             })
             .catch((err) => {
                 console.log(err);
@@ -45,9 +42,7 @@ export default function Notification() {
             });
     };
 
-    
-
-   const getAllProjectRequests = async () => {
+    const getAllProjectRequests = async () => {
         // Get projects that user has created
         const projects = await axiosInstance
             .get('/users/createdProjects', {
@@ -67,58 +62,38 @@ export default function Notification() {
         // Based on user-created projects, get the member requests for each project
         // Store all the member requests in an array where each element represents a different project
         const requests = [];
-        projects.map(async (project) => {
+        
+        for(let i = 0; i < projects.length; i++) {
+            const project = projects[i];
             await axiosInstance
-                .get(`/projects/${project.id}/requests`,{
-                    headers: {'authorization': 'Bearer ' + authorization}, 
-                }
-                )
-                .then((response) => {
-                    const projectName = project.name;
-                    const projectRequests = response.data.memberRequests;
-                    Array.isArray(projectRequests) && projectRequests.length && requests.push({projectName: project.name, projectRequests: response.data.memberRequests});
-                })
-                .catch((err) => {
-                    console.log(err);
-                    console.log(err.response);
-                    setErrorMessage(err.response.data.msg); 
-                    setError(true);
-                });
-        })
+            .get(`/projects/${project.id}/requests`,{
+                headers: {'authorization': 'Bearer ' + authorization}, 
+            }
+            )
+            .then((response) => {
+                const projectName = project.name;
+                const projectRequests = response.data.memberRequests;
+
+                // old one (project name is listed once)
+                Array.isArray(projectRequests) && projectRequests.length && requests.push({projectName: project.name, projectRequests: response.data.memberRequests});
+
+                // new one (project name is listed multiple times)
+                //projectRequests.map((projectRequest) => requests.push([projectName, projectRequest]));      
+            })
+            .catch((err) => {
+                console.log(err);
+                console.log(err.response);
+                setErrorMessage(err.response.data.msg); 
+                setError(true);
+            });
+        }
         setMemberRequests(requests);
     }
-    
-    console.log(memberRequests);
-    // const getProjectRequest = async(id) => {
-    //     await axiosInstance
-    //         .get(`/projects/${id}/requests`,{
-    //             headers: {'authorization': 'Bearer ' + authorization}, 
-    //         }
-    //         )
-    //         .then((response) => {
-    //             setMemberRequests(response.data.memberRequests);
-    //             //console.log(response);
-    //             //console.log(memberRequests);
-                
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //             console.log(err.response);
-    //             setErrorMessage(err.response.data.msg); 
-    //             setError(true);
-    //         });
-    // };
-
-    
-
+        
     useEffect(() => {
         getNotifications(id);
-        getAllProjectRequests();
-        
+        getAllProjectRequests(); 
     }, []);
-
-
-
 
     const AcceptButton = async (id) => {  
         await axiosInstance
@@ -126,7 +101,7 @@ export default function Notification() {
             } 
             )
             .then((response) => {
-                alert("User was accepted!");
+                alert("User was accepted!");               
             })
             .catch((err) => {
                 console.log(err);
@@ -136,15 +111,13 @@ export default function Notification() {
             });        
     };
 
-    
     const DeclineButton = async (id) => {
         await axiosInstance
             .delete(`/projects/requests/${id}` , {headers: {'authorization': 'Bearer ' + authorization}, data: {decision: false}
             } 
             )
             .then((response) => {
-
-                alert("User was accepted!");
+                alert("User was accepted!");            
             })
             .catch((err) => {
                 console.log(err);
@@ -154,6 +127,8 @@ export default function Notification() {
             });
     };
 
+    console.log(memberRequests);
+
     return (
         <section id="header">  
         <Container>        
@@ -162,14 +137,13 @@ export default function Notification() {
                     <h1 className="text-info">Notifications</h1> 
                         {notifications?.map((notification) => {
                             return(
-                                <Card>
+                                <Card className = "notification-card">
                                     <Card.Header>{notification.type}</Card.Header>
                                     <Card.Body>
                                         <blockquote className="blockquote mb-0">
                                         <p>
                                             {' '}
-                                            {notification.subject}{' '}
-                                            
+                                            {notification.subject}{' '}              
                                         </p>
                                         <footer className="blockquote-footer">
                                             {notification.body}
@@ -177,8 +151,6 @@ export default function Notification() {
                                         </blockquote>
                                     </Card.Body>
                                 </Card>
-                                
-                    
                             );
                         }
                         )}
@@ -188,61 +160,36 @@ export default function Notification() {
                 
                 <Col>
                 <h1 className="text-info">Member Approval</h1>
-             
-               
-        <div>   
-        {console.log(memberRequests)}
-                
-                {memberRequests?.map((memberRequest) => {
-               
-                   return (
-                  
-
-                
-
-                   <div>
-                        <Form.Group className="mb-3" controlId="submitform">
-                            <Form.Control type="text" defaultValue = {memberRequest.projectName} readOnly />
-                            <Form.Control type="text" defaultValue = {memberRequest.projectRequests} readOnly />
-                            <Button variant="outline-info" type="submit" onClick={() => AcceptButton(memberRequest.id)} >
-                                Accept
-                            </Button> {'    '}
-                            <Button variant="outline-info" type="submit" onClick={() => DeclineButton(memberRequest.id)} >
-                                Decline
-                            </Button>
-                        </Form.Group>
-                    </div>
-                    );
-                }     
-            )} 
-      
-        </div>
+                <div>   
+                    {memberRequests.map(outerArray => {
+                        return outerArray.projectRequests.map(innerArray => (         
+                                <div>
+                                    <Card border="primary" style={{ width: '23rem' }}>
+                                        <Card.Header>Project Name: {outerArray.projectName}</Card.Header>
+                                        <Card.Body>
+                                            <Card.Title>{innerArray.username}</Card.Title>
+                                            <Card.Text>
+                                                {innerArray.message}
+                                            </Card.Text>
+                                            <Card.Link className="mb-2 text-muted" href={"/users/" + innerArray.username}>Link to Profile</Card.Link>  
+                                        </Card.Body>
+                                        <Card.Body>
+                                            <Button variant="outline-info" type="submit" onClick={() => AcceptButton(innerArray.id)} >
+                                                Accept
+                                            </Button>{'    '}
+                                            <Button variant="outline-info" type="submit" onClick={() => DeclineButton(innerArray.id)} >
+                                                Decline
+                                            </Button>
+                                        </Card.Body>
+                                    </Card>    
+                                    <br />                 
+                                </div>
+                        ))    
+                    })} 
+                </div>
                 </Col>             
             </Row>                           
         </Container>
         </section>
       );
 }
-
-
- {/*
-            {memberRequests?.map((memberRequest, index) => (
-              <option key={`project-option-${index}`} value={memberRequest.id}>
-                
-                {memberRequest.username}
-              </option>
-            
-               
-            ))}
-          <Form.Group className="mb-3" controlId="submitform">
-                        
-                        <Button variant="outline-info" type="submit" onClick={AcceptButton} >
-                            Accept
-                        </Button> {'    '}
-                        <Button variant="outline-info" type="submit" onClick={DeclineButton} >
-                            Decline
-                        </Button>
-                </Form.Group>
-
-
-            </div>*/}

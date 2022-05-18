@@ -43,3 +43,38 @@
   .button-form {
 	  text-align: center;
   }
+
+  .alert-project{
+	margin-top: 30px;
+  }
+
+
+  .transition-card{
+	background: rgb(64, 156, 243);
+	padding: 3rem 5rem;
+	border-radius: 2rem;
+	
+  }
+
+  .transition-div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 10px;
+  }
+
+  .transition-card p {
+	  padding-top: 1rem;
+	  line-height: 150%;
+	  font-family: sans-serif;
+  }
+
+  .display-inline{
+	display:inline;
+  }
+
+  .display-inline-h4{
+	display:inline;
+	text-decoration: underline;
+  }
+ 
