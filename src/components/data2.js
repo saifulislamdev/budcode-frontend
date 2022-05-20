@@ -6,9 +6,9 @@ export const questions = [
   },
   {
     id: 2,
-    title: "Can anyone use BudCode?",
+    title: "Is Coding Experience Necessary?",
     answer:
-      "Anyone can use BudCode as it is completely free. Whether you also have experience or are a complete novice, it doesn't matter!",
+      "No matter how much or how little experience you have with coding, anyone is free to use BudCode and find or create a project that suits their needs!",
   },
   {
     id: 3,
