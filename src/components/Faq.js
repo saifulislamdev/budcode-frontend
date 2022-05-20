@@ -17,11 +17,9 @@ const Faq = () => {
       <div className="container faq">
         <div className="u-title" data-aos="fade-up">
           <MdOutlineLibraryBooks color="navy" size={30} />
-          <h2>FAQs</h2>
+          <h2>FAQ</h2>
           <p className="u-text-small">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique
-            itaque veniam laudantium, quam quas dolor tempora eligendi officia
-            sequi. Iusto.
+            Here are some answers that might be what you are looking for in BudCode!
           </p>
         </div>
         <div className="questions">
