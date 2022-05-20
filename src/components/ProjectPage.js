@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProjectPage.css';
 import {useContext, useEffect, useState, useRef} from 'react';
-import { Container, Form, Button, Row, Col, Popover, OverlayTrigger, Overlay, Tooltip,Alert,Modal, Badge, ListGroup, Card} from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Popover, OverlayTrigger, Overlay, Tooltip,Alert,Modal, Badge, ListGroup, Card, ButtonGroup, ToggleButton} from 'react-bootstrap';
 import {UserContext} from '../util/context';
 import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
@@ -235,7 +235,20 @@ export default function ProjectPage() {
     const members2 = members.split(',');
 
     const [isOpen, setIsOpen] = useState(false);
-  
+
+    const popover = (
+        <Popover id="popover-basic">
+            <Popover.Body>
+            Register or login to use this feature!
+            </Popover.Body>
+        </Popover>
+    );
+
+    const radios = [
+        {name: 'In Progress', value: 'In Progress'},
+        {name: 'Complete', value: 'Complete'}
+    ]
+
     const target = useRef(null);
     console.log('members', members);
     console.log('membersWithJoinDates', membersWithJoinDates);
@@ -439,7 +452,26 @@ export default function ProjectPage() {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Status</Form.Label>
-                            <Form.Control type="text" defaultValue = {status} onChange = {(e) => (setStatus(e.target.value))}/>
+                            <Form.Text>
+                            <ButtonGroup>
+                                {radios.map((radio, idx) => (
+                                <ToggleButton
+                                    key={idx}
+                                    id={`radio-${idx}`}
+                                    type="radio"
+                                    variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+                                    name="radio"
+                                    value={radio.value}
+                                    checked={status === radio.value}
+                                    onChange={(e) => setStatus(e.currentTarget.value)}
+                                >
+                                    {radio.name}
+                                </ToggleButton>
+                                ))}
+                            </ButtonGroup>
+                            </Form.Text>
+
+                            {/* <Form.Control type="text" defaultValue = {status} onChange = {(e) => (setStatus(e.target.value))}/> */}
                             </Form.Group>
                             </Form>
                         </Col>
@@ -512,8 +544,12 @@ export default function ProjectPage() {
                     )}
                     {!isValidUser && (
                             <Form.Group className='button-form'>
-                            <Button variant="secondary" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
-                            <Button variant="secondary" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
+                                <OverlayTrigger trigger="click" placement="left" overlay={popover}>
+                                    <Button variant="secondary">Follow</Button>
+                                </OverlayTrigger>{' '}
+                                <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+                                    <Button variant="secondary">Request</Button>
+                                </OverlayTrigger>{' '}                    
                             </Form.Group>
                     )} 
 

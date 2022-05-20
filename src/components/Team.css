@@ -35,12 +35,27 @@ section#team {
   margin: 1rem 2rem;
   border: 2px solid #fff;
   border-radius: 5px;
-  width: 12rem;
+  width: 15rem;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
   font-size: 1.5rem;
+}
+
+.team-photos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+}
+.team-photo{
+  margin: 1rem 2rem;
+  width: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
 /*linear-gradient(

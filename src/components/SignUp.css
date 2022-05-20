@@ -5,7 +5,7 @@
 }
 
 .header-css {
-  font-family: Georgia;
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: normal;
 }
@@ -47,6 +47,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+  }
+
+  .asterisk:after{
+    content: " *";
+    color: red;
   }
   
  

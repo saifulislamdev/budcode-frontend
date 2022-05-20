@@ -98,21 +98,21 @@ export default function SignUp() {
             <div className = "split right">
                 <div className="centered">
                     <Form>
-                        <h1 className="header-css">Register Account</h1>
+                        <h1 className="mb-3">Register Account</h1>
                         <h6>For the purpose of industry regulation, your details are required.</h6>
 
                     <Form.Group className="mb-3" controlId="formBasicFirstname">
-                        <Form.Label>First Name</Form.Label>
+                        <Form.Label className="asterisk">First Name</Form.Label>
                         <Form.Control className="name-input-css" type="name" placeholder="Enter first name" onChange={(e) => {setFirstName(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicLastname">
-                        <Form.Label>Last Name</Form.Label>
+                        <Form.Label className="asterisk">Last Name</Form.Label>
                         <Form.Control className="name-input-css" type="name" placeholder="Enter last name" onChange={(e) => {setLastName(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicGender">
-                        <Form.Label>Choose Your Gender</Form.Label>
+                        <Form.Label className="asterisk">Choose Your Gender</Form.Label>
                         <Form.Select aria-label="Default select example"> 
                             <option key='blankChoice' hidden value/>
                             <option value="Male" onChange={(e) => {setGender(e.target.value)}}>Male</option>
@@ -122,12 +122,12 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicUsername">
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label className="asterisk">Username</Form.Label>
                         <Form.Control type="text" placeholder="Create Username" onChange={(e) => {setUsername(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email Address</Form.Label>
+                        <Form.Label className="asterisk">Email Address</Form.Label>
                         <Form.Control type="email" placeholder="Enter email" onChange={(e) => {setEmail(e.target.value)}}/>
                         <Form.Text className="text-muted">
                             We'll never share your email with anyone else.
@@ -135,7 +135,7 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Create Password</Form.Label>
+                        <Form.Label className="asterisk">Create Password</Form.Label>
                         <Form.Control
                             type="password"
                             placeholder="Password" onChange={(e) => {setPassword(e.target.value)}}/>
@@ -146,7 +146,7 @@ export default function SignUp() {
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicRepeatPassword">
-                        <Form.Label>Submit Password Again</Form.Label>
+                        <Form.Label className="asterisk">Submit Password Again</Form.Label>
                         <Form.Control
                             type="password"
                             placeholder="Password" onChange={(e) => {setRepeatPassword(e.target.value)}}/>
