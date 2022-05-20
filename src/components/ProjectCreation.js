@@ -8,6 +8,7 @@ import { UserContext } from '../util/context';
 import { v4 as uuid } from 'uuid';
 
 function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, handleAddLink }) {
+  console.log(links)
     return (
         <Modal show={show} onHide={onHide} size="md" centered>
             <Modal.Header>
@@ -36,6 +37,7 @@ function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, 
                                     name="type"
                                     onChange={(e) => handleLinksChange(e, link.id)}
                                     type="text"
+                                    value={link.type}
                                     placeholder="Type (e.g. Github, LinkedIn, etc.)"
                                 />
                             </div>
@@ -44,8 +46,9 @@ function LinksModal({ show, onHide, links, handleLinksChange, handleRemoveLink, 
                                 <Form.Control
                                     id={link?.id}
                                     name="link"
-                                    onChange={(e) => handleLinksChange(e, link.id)}
                                     type="text"
+                                    value={link.link}
+                                    onChange={(e) => handleLinksChange(e, link.id)}
                                     placeholder="URL (e.g. https://www.google.com/)"
                                 />
                             </div>

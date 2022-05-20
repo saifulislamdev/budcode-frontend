@@ -17,7 +17,7 @@ const Faq = () => {
       <div className="container faq">
         <div className="u-title" data-aos="fade-up">
           <MdOutlineLibraryBooks color="navy" size={30} />
-          <h2>FAQs</h2>
+          <h2>FAQ</h2>
           <p className="u-text-small">
             Select from the following list of FAQs. Browse through these FAQs to find answers to commmonly raised questions.
           </p>

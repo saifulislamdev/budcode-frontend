@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import { axiosInstance } from '../util/config';
 import { Card } from 'react-bootstrap';
 import { UserContext } from '../util/context';
-import { Typography } from '@mui/material';
+
 
 const colors = {
   orange: '#FFBA5A',
@@ -43,6 +43,11 @@ export default function Rating({ firstName, userId,reviews, canReview }) {
     };
     await axiosInstance.post('/ratings', data, {
       headers: { authorization: 'Bearer ' + authorization },
+    })
+    .then((res) => {
+      alert('Review has been created! Refresh The Page.');   
+    })
+     .catch((err) => {
     });
   };
 
