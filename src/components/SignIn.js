@@ -77,7 +77,7 @@ export default function SignIn() {
             <div className = "split right">
                 <div className="centered">
                     <Form>
-                        <h1 className="header-css">Login to Your Account</h1>
+                        <h1 className="mb-3">Login to Your Account</h1>
           
                         <Form.Group className="mb-3" controlId="form-Basic-Username">
                             <Form.Label>Username</Form.Label>
