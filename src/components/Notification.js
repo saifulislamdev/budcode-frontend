@@ -7,12 +7,15 @@ import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from '../util/config';
 import { boolean } from 'yup';
+import Spinner from 'react-bootstrap/Spinner'
+
 
 export default function Notification() {
     const [notifications, setNotifications] = useState([]);
     const [memberRequests, setMemberRequests] = useState([]);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const {id} = useParams();
     let decision = false;
     let navigate = useNavigate(); 
@@ -76,7 +79,7 @@ export default function Notification() {
 
                 // old one (project name is listed once)
                 Array.isArray(projectRequests) && projectRequests.length && requests.push({projectName: project.name, projectRequests: response.data.memberRequests});
-
+                setIsLoading(false);
                 // new one (project name is listed multiple times)
                 //projectRequests.map((projectRequest) => requests.push([projectName, projectRequest]));      
             })
@@ -101,7 +104,8 @@ export default function Notification() {
             } 
             )
             .then((response) => {
-                alert("User was accepted!");               
+                alert("User was accepted!");
+                window.location.reload();         
             })
             .catch((err) => {
                 console.log(err);
@@ -117,7 +121,8 @@ export default function Notification() {
             } 
             )
             .then((response) => {
-                alert("User was accepted!");            
+                alert("User was accepted!");  
+                window.location.reload();          
             })
             .catch((err) => {
                 console.log(err);
@@ -140,15 +145,13 @@ export default function Notification() {
                                 <Card className = "notification-card">
                                     <Card.Header>{notification.type}</Card.Header>
                                     <Card.Body>
-                                        <blockquote className="blockquote mb-0">
-                                        <p>
+                                        <Card.Title>
                                             {' '}
                                             {notification.subject}{' '}              
-                                        </p>
-                                        <footer className="blockquote-footer">
-                                            {notification.body}
-                                        </footer>
-                                        </blockquote>
+                                        </Card.Title>
+                                        <Card.Text>
+                                        {notification.body}
+                                        </Card.Text>    
                                     </Card.Body>
                                 </Card>
                             );
@@ -160,8 +163,11 @@ export default function Notification() {
                 
                 <Col>
                 <h1 className="text-info">Member Approval</h1>
-                <div>   
-                    {memberRequests.map(outerArray => {
+                <div> 
+                    {isLoading ? <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                    </Spinner> :
+                    memberRequests.map(outerArray => {
                         return outerArray.projectRequests.map(innerArray => (         
                                 <div>
                                     <Card border="primary" style={{ width: '23rem' }}>
@@ -186,6 +192,7 @@ export default function Notification() {
                                 </div>
                         ))    
                     })} 
+                
                 </div>
                 </Col>             
             </Row>                           

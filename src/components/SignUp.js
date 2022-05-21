@@ -1,12 +1,13 @@
 import React, {useContext, useState} from 'react';
 import { Link } from "react-router-dom";
 import budcodeLogo from '../assets/budcodeLogo.png'
-import { Container, Form, Button} from 'react-bootstrap';
+import { Container, Form, Button, ButtonGroup, ToggleButton} from 'react-bootstrap';
 import './SignUp.css';
 import { axiosInstance } from '../util/config';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
 import {UserContext} from '../util/context';
+
 
 
 export default function SignUp() {
@@ -86,6 +87,12 @@ export default function SignUp() {
         }
     };
 
+    const radios = [
+        {type: 'Male', value: 'Male'},
+        {type: 'Female', value: 'Female'},
+        {type: 'Other', value: 'Other'}
+    ]
+
     return (
         <Container id="main-container" className="d-grid h-100">
             
@@ -111,7 +118,7 @@ export default function SignUp() {
                         <Form.Control className="name-input-css" type="name" placeholder="Enter last name" onChange={(e) => {setLastName(e.target.value)}}/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formBasicGender">
+                    {/* <Form.Group className="mb-3" controlId="formBasicGender">
                         <Form.Label className="asterisk">Choose Your Gender</Form.Label>
                         <Form.Select aria-label="Default select example"> 
                             <option key='blankChoice' hidden value/>
@@ -119,7 +126,31 @@ export default function SignUp() {
                             <option value="Female" onChange={(e) => {setGender(e.target.value)}}>Female</option>
                             <option value="Other" onChange={(e) => {setGender(e.target.value)}}>Other</option>
                         </Form.Select>
-                    </Form.Group>
+                    </Form.Group> */}
+
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Text>
+                            <ButtonGroup>
+                                {radios.map((radio, idx) => (
+                                <ToggleButton
+                                    key={idx}
+                                    id={`radio-${idx}`}
+                                    type="radio"
+                                    variant={ 'outline-primary'  }
+                                    name="radio"
+                                    value={radio.value}
+                                    checked={gender === radio.value}
+                                    onChange={(e) => setGender(e.currentTarget.value)}
+                                >
+                                    {radio.type}
+                                </ToggleButton>
+                                ))}
+                            </ButtonGroup>
+                            </Form.Text>
+
+                            {/* <Form.Control type="text" defaultValue = {status} onChange = {(e) => (setStatus(e.target.value))}/> */}
+                            </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label className="asterisk">Username</Form.Label>

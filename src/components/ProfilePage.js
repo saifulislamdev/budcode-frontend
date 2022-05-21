@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Rating from './Rating';
 import Carousel from 'react-bootstrap/Carousel';
 import gradientPic from '../assets/gradientPic.jpg';
+import NotFound from './NotFound';
 
 export default function ProfilePage() {
   const { id } = useParams();
@@ -78,7 +79,7 @@ export default function ProfilePage() {
         setProjectMemberships(projectMemberships);
         setReviews(reviews);
         setSkills(skills.toString());
-        setVisitingUserMutualProjects(visitingUserMutualProjects || []);
+        setVisitingUserMutualProjects(visitingUserMutualProjects);
         console.log(response.data);
       })
       .catch((err) => {
@@ -130,8 +131,10 @@ export default function ProfilePage() {
 
   return (
     <section id='header'>
+      
       <Container>
-        
+      {!error && (
+        <div>
             <Row>
               <Carousel fade>
                 <Carousel.Item>
@@ -272,6 +275,36 @@ export default function ProfilePage() {
                   ))  
               ))}
             </Row>
+            </div>
+            )}
+
+            {error && (
+              <div>
+                <NotFound />
+              </div>
+            )}
+
+            {!canEdit && !(visitingUserMutualProjects.length == 0) &&(
+              <div>
+               <h1 className='text-info'>Mutual Projects</h1>
+               <Row xs={1} md={5} className="g-4">
+                 {visitingUserMutualProjects.map(mutualprojects => ( 
+                   Array.from({ length: 1 }).map((_, idx) => (
+                     <Col>     
+                          <Card style={{ width: '18rem' }}>
+                         <Card.Body>
+                           <Card.Title>{mutualprojects.projectName}</Card.Title>
+                           
+                         </Card.Body>
+                       </Card>
+                     </Col>
+                     ))  
+                 ))}
+               </Row>
+               </div>
+            )}
+
+
 
             {canEdit && (
             <div className = "alert-profile">
@@ -407,12 +440,12 @@ export default function ProfilePage() {
                         <Form.Control
                           type='text'
                           defaultValue={link.type}
-                          onChange={(e) => setLinks(e.target.value)}
+                          onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
                         />
                         <Form.Control
                           type='text'
                           defaultValue={link.link}
-                          onChange={(e) => setLinks(e.target.value)}
+                          onChange={(e) => {link.link = e.target.value; setLinks([...links]);}}
                         />
                       </Form.Group>
                     </Form>
@@ -432,6 +465,9 @@ export default function ProfilePage() {
           </div>
         )}
 
+      {!error && (
+              <div>
+            
       {id !== username &&<Rating
         firstName={firstName}
         userId={id}
@@ -452,8 +488,9 @@ export default function ProfilePage() {
           );
         })}
           
-        </div>        
-
+        </div>   
+        </div>     
+      )}
       </Container>
       
     
