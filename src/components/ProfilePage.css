@@ -29,11 +29,9 @@
   }
 
 .review-body-style {
-  display: inherit;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
+  padding-top: 5vh;
 }
+
 
 .alert-profile{
   margin-top: 10px;

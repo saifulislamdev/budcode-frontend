@@ -431,9 +431,7 @@ export default function ProfilePage() {
             </Form.Group>
           </div>
         )}
-      </Container>
-      <div className='project-following-scroll'>
-      </div>
+
       {id !== username &&<Rating
         firstName={firstName}
         userId={id}
@@ -441,10 +439,11 @@ export default function ProfilePage() {
         canReview={canReview}
       />}
         <div className = "review-body-style">
-          <h1 className='text-info'>Previous Reviews</h1>
+          <h1 className="text-info">Previous Reviews</h1>
+        
         {reviews.map((review) => {
           return (
-            <Card >
+            <Card>
               <Card.Body>
                 <Card.Title>{review.subject}</Card.Title>
                 <Card.Text>{review.body}</Card.Text>
@@ -452,7 +451,12 @@ export default function ProfilePage() {
             </Card>
           );
         })}
-        </div>
+          
+        </div>        
+
+      </Container>
+      
+    
     </section>
   );
 }
