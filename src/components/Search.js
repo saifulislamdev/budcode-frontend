@@ -121,30 +121,28 @@ export default function Search() {
         <div className="search-page">
             <div className="skills-tag-container">
                 {/* Skills card */}
-                {!!skills?.length && (
                     <div className="skill-tag-card">
                         <h2>Skills</h2>
-                        {skills?.map((skill, index) => (
+                        {!!skills?.length && skills?.map((skill, index) => (
                             <div key={`tag-${index}`} className="project-form-element">
                                 <input id="skills" name={skill} type="checkbox" onChange={handleInputChange} />
                                 <label htmlFor={skill}>{skill}</label>
                             </div>
                         ))}
                     </div>
-                )}
+                
 
                 {/* Tags card */}
-                {!!tags?.length && (
                     <div className="skill-tag-card">
                         <h2>Tags</h2>
-                        {tags?.map((tag, index) => (
+                        {!!tags?.length && tags?.map((tag, index) => (
                             <div key={`tag-${index}`} className="project-form-element">
                                 <input id="tags" name={tag} type="checkbox" onChange={handleInputChange} />
                                 <label htmlFor={tag}>{tag}</label>
                             </div>
                         ))}
                     </div>
-                )}
+               
             </div>
 
             {/* Search and projects */}
