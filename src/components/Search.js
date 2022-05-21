@@ -75,9 +75,18 @@ export default function Search() {
         console.log(url);
 
         axiosInstance.get(`/projects${url}`).then((res) => {
-            setProjects(res.data);
-            setLoadedRecords(res.data);
-            res.data.length < 30 && setHasMore(false);
+            const projects = res.data;
+            setProjects(projects);
+            setLoadedRecords(projects);
+            projects.length < 30 && setHasMore(false);
+            setSkills (
+                uniq(
+                    projects.flatMap((item) => item.skills.map((skill) => skill.trim()))
+                )
+            );
+            setTags(
+                uniq(projects.flatMap((item) => item.tags.map((tag) => tag.trim())))
+            );
         });
     };
 
