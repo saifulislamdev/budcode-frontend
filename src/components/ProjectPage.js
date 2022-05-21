@@ -151,6 +151,7 @@ export default function ProjectPage() {
                 skills: skills.split(','),
                 tags: tags.split(','),
                 members: members.split(','),
+                links: links,
                 canReview: status === 'Complete'?true:false
 
              
@@ -206,6 +207,7 @@ export default function ProjectPage() {
             .then((response) => {            
                 console.log(response);
                 alert("You have successfully followed this project!");
+                window.location.reload(); 
             })
             .catch((err) => {
                 console.log(err);
@@ -263,10 +265,19 @@ export default function ProjectPage() {
                         <Typography variant="h5" align="center" color="textSecondary" paragraph>
                         {description}
                         </Typography>
-                        <Form.Group className='button-form'>
-                            <Button variant="outline-info" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
-                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Interested</Button>{' '}
-                        </Form.Group>
+                        {canUserFollow && (
+                            <Form.Group className='button-form'>
+                            <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
+                            </Form.Group>
+                        )}
+                        {!canUserFollow && (
+                            <Form.Group className='button-form'>
+                            <Button variant="info" type="submit" onClick={followProject} disabled>Following</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
+                            </Form.Group>
+                        )}
+
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
                             <Modal.Title>Message</Modal.Title>
@@ -291,17 +302,17 @@ export default function ProjectPage() {
                             </Modal.Footer>
                         </Modal>
                     
-
+                    <div className= "project-details">
                     <Row>
-                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
-                        Contact Me:
-                        </Typography>
                         <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                        {creatorEmail}
+                        Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower(s) | Status: <Badge pill bg="success">
+                            {status}
+                        </Badge>
                         </Typography>
                     </Row>
+                    </div>
 
-                    <div className="transition-div">
+                    {/* <div className="transition-div">
                         <motion.div transition={{layout: {duration: 1}}} 
                         layout
                         onClick={() => setIsOpen(!isOpen)} 
@@ -324,7 +335,7 @@ export default function ProjectPage() {
                             </motion.div>
                             )}
                         </motion.div>
-                    </div>
+                    </div> */}
 
                     <h1 className="text-info">Requirements</h1>
                     <Row xs={1} md={5} className="g-4">
@@ -400,6 +411,17 @@ export default function ProjectPage() {
                         ))  
                     ))}
                     </Row>
+
+                    <div className="contact-footer">
+                    <Row >
+                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+                        Questions? Contact here:
+                        </Typography>
+                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                        {creatorEmail}
+                        </Typography>
+                    </Row>
+                    </div>
 
                     <div className='alert-project'>
                     <Row>
@@ -459,7 +481,7 @@ export default function ProjectPage() {
                                     key={idx}
                                     id={`radio-${idx}`}
                                     type="radio"
-                                    variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+                                    variant={idx % 2 ? 'outline-success' : 'outline-warning'}
                                     name="radio"
                                     value={radio.value}
                                     checked={status === radio.value}
@@ -490,8 +512,16 @@ export default function ProjectPage() {
                                 <Form>
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                 
-                                <Form.Control type="text" defaultValue = {link.type} onChange = {(e) => (setLinks(e.target.value))}/>
-                                <Form.Control type="text" defaultValue = {link.link} onChange = {(e) => (setLinks(e.target.value))}/>
+                                <Form.Control
+                                    type='text'
+                                    defaultValue={link.type}
+                                    onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
+                                    />
+                                <Form.Control
+                                    type='text'
+                                    defaultValue={link.link}
+                                    onChange={(e) => {link.link = e.target.value; setLinks([...links]);}}
+                                />
                                 </Form.Group>
                                 </Form>
 
@@ -532,13 +562,19 @@ export default function ProjectPage() {
                     )}
                     {isValidUser && !canUserFollow && canUserRequest && !hasUserRequested && (
                             <Form.Group className='button-form'>
-                            <Button variant="outline-info" type="submit" onClick={followProject} disabled>Follow</Button>{' '}
+                            <Button variant="info" type="submit" onClick={followProject} disabled>Following</Button>{' '}
                             <Button variant="outline-info" type="submit" onClick={handleShow}>Request</Button>{' '}
                             </Form.Group>
                     )}
                     {isValidUser && canUserFollow && !canUserRequest && hasUserRequested && (
                             <Form.Group className='button-form'>
                             <Button variant="outline-info" type="submit" onClick={followProject}>Follow</Button>{' '}
+                            <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
+                            </Form.Group>
+                    )}
+                    {isValidUser && !canUserFollow && !canUserRequest && hasUserRequested && (
+                            <Form.Group className='button-form'>
+                            <Button variant="info" type="submit" onClick={followProject} disabled>Following</Button>{' '}
                             <Button variant="outline-info" type="submit" onClick={handleShow} disabled>Request</Button>{' '}
                             </Form.Group>
                     )}
@@ -576,16 +612,18 @@ export default function ProjectPage() {
                          </Button>
                          </Modal.Footer>
                      </Modal>
-                     <Row>
-                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
-                        Contact Me:
-                        </Typography>
+
+                     <div className= "project-details">
+                    <Row>
                         <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                        {creatorEmail}
+                        Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower(s) | Status: <Badge pill bg="success">
+                            {status}
+                        </Badge>
                         </Typography>
                     </Row>
+                    </div>
 
-                    <div className="transition-div">
+                    {/* <div className="transition-div">
                         <motion.div transition={{layout: {duration: 1}}} 
                         layout
                         onClick={() => setIsOpen(!isOpen)} 
@@ -608,7 +646,7 @@ export default function ProjectPage() {
                             </motion.div>
                             )}
                         </motion.div>
-                    </div>
+                    </div> */}
 
                     <h1 className="text-info">Requirements</h1>
                     <Row xs={1} md={5} className="g-4">
@@ -684,6 +722,18 @@ export default function ProjectPage() {
                         ))  
                     ))}
                     </Row>
+                    
+                    <div className="contact-footer">
+                    <Row >
+                    <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+                        Questions? Contact here:
+                        </Typography>
+                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                        {creatorEmail}
+                        </Typography>
+                    </Row>
+                    </div>
+
                     {error ? (
                                 <p style={{ color: 'red' }}>
                                     {errorMessage}

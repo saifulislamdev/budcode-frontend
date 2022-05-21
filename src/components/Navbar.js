@@ -8,6 +8,7 @@ import "./Navbar.css";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {UserContext} from '../util/context';
 import { Button} from 'react-bootstrap';
+import { Avatar, } from "@material-ui/core";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -37,9 +38,11 @@ const Navbar = () => {
       
       <div className="logo">
         <BsCode color="#fff" size={33} />
+        <Link to = '/' style={{ textDecoration: 'none' }}>
         <p className="logo-text">
           Bud<span>Code</span>
         </p>
+        </Link>
         <BsCodeSlash color="#fff" size={33} />
       </div>
       {localStorage.getItem('username') ?
@@ -49,12 +52,9 @@ const Navbar = () => {
           className="nav-links"
           id={showMenu ? "nav-links-mobile" : "nav-links-mobile-hide"}
         >
-          <li>
+          {/* <li>
             <a href="/">Home</a>          
-          </li>
-          <li>
-            <a href={`/users/${username}`}>Profile</a>
-          </li>
+          </li> */}
           <li> 
            <a href="/feed">Feed</a>
           </li>
@@ -65,7 +65,11 @@ const Navbar = () => {
             <a href="/projects/search">Search</a>
           </li>
           <li>
-            <a href={`/notification/user/${username}`}>Notification</a>
+            <a href={`/users/${username}`}>Profile</a>
+          </li>
+         
+          <li>
+            <a href={`/notification/user/${username}`}>Notifications</a>
           </li>
           <li className="nav-btn">
             <Button variant="outline-info" value= 'logout'  type="submit" onClick={handleClick}>
@@ -96,7 +100,7 @@ const Navbar = () => {
           </li>
           <li className="nav-btn">
             <Button2 text={"Sign Up"} btnClass={"btn-dark2"} href={"/auth/signup"} />
-            <Button2 text={"Log In"} btnClass={"btn-dark2"} href={"/auth/signin"} />
+            <Button2 text={"Sign In"} btnClass={"btn-dark2"} href={"/auth/signin"} />
           </li>
         </ul>
       </menu>

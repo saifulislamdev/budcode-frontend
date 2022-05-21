@@ -19,7 +19,7 @@ const Faq = () => {
           <MdOutlineLibraryBooks color="navy" size={30} />
           <h2>FAQ</h2>
           <p className="u-text-small">
-            Select from the following list of FAQs. Browse through these FAQs to find answers to commmonly raised questions.
+            Select from the following list of FAQs. Browse through these FAQs to find answers to commonly raised questions.
           </p>
         </div>
         <div className="questions">
