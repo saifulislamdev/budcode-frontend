@@ -537,7 +537,7 @@ export default function ProfilePage() {
         
         {reviews.map((review) => {
           return (
-            <Card>
+            <Card className ="review-card">
               <Card.Body>
                 <Card.Title>{review.subject}</Card.Title>
                 <Card.Text>{review.body}</Card.Text>
