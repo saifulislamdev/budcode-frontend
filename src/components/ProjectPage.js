@@ -398,19 +398,24 @@ export default function ProjectPage() {
                         ))  
                     ))}
                     </Row>
-
-                    <h1 className="text-info">User Mutual Skills</h1>
-                    <Row xs={1} md={5} className="g-4">
-                    {userMutualSkills.map(userMutualSkill => ( 
-                        Array.from({ length: 1 }).map((_, idx) => (
-                        <Col>     
-                            <ListGroup>
-                                <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
-                            </ListGroup>
-                        </Col>
-                        ))  
-                    ))}
-                    </Row>
+                    
+                    {!(userMutualSkills.length == 0 ) && (
+                        <div>
+                            <h1 className="text-info">User Mutual Skills</h1>
+                            <Row xs={1} md={5} className="g-4">
+                            {userMutualSkills.map(userMutualSkill => ( 
+                                Array.from({ length: 1 }).map((_, idx) => (
+                                <Col>     
+                                    <ListGroup>
+                                        <ListGroup.Item>{userMutualSkill}</ListGroup.Item>
+                                    </ListGroup>
+                                </Col>
+                                ))  
+                            ))}
+                            </Row>
+                        </div>
+                    )}
+                    
 
                     <div className="contact-footer">
                     <Row >

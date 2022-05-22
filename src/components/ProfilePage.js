@@ -180,19 +180,32 @@ export default function ProfilePage() {
               </Carousel>
             </Row>
 
-            <h1 className='text-info'>Skills</h1>
-            <Row xs={1} md={5} className="g-4">
-              {skills2.map(skill => ( 
-                Array.from({ length: 1 }).map((_, idx) => (
-                  <Col>     
-                       <ListGroup>
-                        <ListGroup.Item>{skill}</ListGroup.Item>
-                      </ListGroup>
-                  </Col>
-                  ))  
-              ))}
-            </Row>
+            {!(skills.length == 0) && (
+              <div>
+                <h1 className='text-info'>Skills</h1>
+                <Row xs={1} md={5} className="g-4">
+                  {skills2.map(skill => ( 
+                    Array.from({ length: 1 }).map((_, idx) => (
+                      <Col>     
+                          <ListGroup>
+                            <ListGroup.Item>{skill}</ListGroup.Item>
+                          </ListGroup>
+                      </Col>
+                      ))  
+                  ))}
+                </Row>
+              </div>
+            )}
 
+            {(skills.length == 0) && (
+              <div>
+            <h1 className='text-info'>Skills</h1>
+            <p>There are no skills to display.</p>
+            </div>
+            )}
+
+            {!(interests.length == 0) && (
+              <div>
             <h1 className='text-info'>Interests</h1>
             <Row xs={1} md={5} className="g-4">
               {interests2.map(interest => ( 
@@ -205,7 +218,19 @@ export default function ProfilePage() {
                   ))  
               ))}
             </Row>
+            </div>
+            )}
 
+            {(interests.length == 0) && (
+              <div>
+            <h1 className='text-info'>Interests</h1>
+            <p>There are no interests to display.</p>
+            </div>
+            )}
+
+
+            {!(links.length == 0) && (
+              <div>
             <h1 className='text-info'>Links</h1>
             <Row xs={1} md={5} className="g-4">
               {links.map(link => ( 
@@ -223,8 +248,18 @@ export default function ProfilePage() {
                   ))  
               ))}
             </Row>
+            </div>
+            )}
 
+            {(links.length == 0) && (
+              <div>
+            <h1 className='text-info'>Links</h1>
+            <p>There are no links to display.</p>
+            </div>
+            )}
 
+            {!(projectFollowings.length == 0) && (
+              <div>
             <h1 className='text-info'>Project Following</h1>
             <Row xs={1} md={5} className="g-4">
               {projectFollowings.map(projectFollowing => ( 
@@ -248,33 +283,56 @@ export default function ProfilePage() {
                   ))  
               ))}
             </Row>
+            </div>
+            )}
 
+          {(projectFollowings.length == 0) && (
+              <div>
+            <h1 className='text-info'>Project Following</h1>
+            <p>There are no following projects to display.</p>
+            </div>
+          )}
+
+          {!(projectMemberships.length == 0) && (
+              <div>
+                <h1 className='text-info'>Project Membership</h1>
+                <Row xs={1} md={5} className="g-4">
+                  {projectMemberships.map(projectMembership => ( 
+                    Array.from({ length: 1 }).map((_, idx) => (
+                      <Col>     
+                            <div>
+                            <Card style={{ width: '18rem' }}>
+                              <Card.Body>
+                                <Card.Title>
+                                  {projectMembership.projectName}
+                                </Card.Title>
+                                <Card.Subtitle className='mb-2 text-muted'>
+                                  {projectMembership.projectStatus}
+                                </Card.Subtitle>
+                                <Card.Link
+                                  href={'/projects/' + projectMembership.projectId}
+                                >
+                                  Link to project
+                                </Card.Link>
+                              </Card.Body>
+                            </Card>
+                            </div>
+                      </Col>
+                      ))  
+                  ))}
+                </Row>
+
+              </div>
+          )}
+
+          {(projectMemberships.length == 0) && (
+            <div>
             <h1 className='text-info'>Project Membership</h1>
-            <Row xs={1} md={5} className="g-4">
-              {projectMemberships.map(projectMembership => ( 
-                Array.from({ length: 1 }).map((_, idx) => (
-                  <Col>     
-                        <div>
-                        <Card style={{ width: '18rem' }}>
-                          <Card.Body>
-                            <Card.Title>
-                              {projectMembership.projectName}
-                            </Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>
-                              {projectMembership.projectStatus}
-                            </Card.Subtitle>
-                            <Card.Link
-                              href={'/projects/' + projectMembership.projectId}
-                            >
-                              Link to project
-                            </Card.Link>
-                          </Card.Body>
-                        </Card>
-                        </div>
-                  </Col>
-                  ))  
-              ))}
-            </Row>
+            <p>There are no project memberships to display.</p>
+            </div>
+          )}
+
+            
             </div>
             )}
 
