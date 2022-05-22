@@ -504,7 +504,7 @@ export default function ProfilePage() {
                             <Form.Control
                               type='text'
                               defaultValue={link.link}
-                              onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
+                              onChange={(e) => {link.link = e.target.value; setLinks([...links]);}}
                             />
                           </Form.Group>
                         </Form>
