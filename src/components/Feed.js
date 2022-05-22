@@ -156,7 +156,8 @@ export default function Feed() {
                     <h4>{update.body}</h4>
                   </div>
                   <div className='custom-card-footer'>
-                    <p>{update.time_posted.slice(0,10)}</p>
+                 
+                    <p>{update.time_posted.slice(0,10)} {update.time_posted.slice(11,19)}</p>
                   </div>
                 </div>
               );
