@@ -40,7 +40,7 @@ function App() {
         <Route exact path="/projects/search" element={<Search/>}/>
         <Route exact path="/projects/create" element={<ProjectCreation/>}/>
         <Route exact path ="/users/:id" element={<ProfilePage/>}/>
-        <Route exact path = "/notification/user/:id" element={<Notification/>}/>
+        <Route exact path = "/notification/:id" element={<Notification/>}/>
         </Route>
 
         

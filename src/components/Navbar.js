@@ -7,8 +7,7 @@ import "./Button2.css";
 import "./Navbar.css";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {UserContext} from '../util/context';
-import { Button} from 'react-bootstrap';
-import { Avatar, } from "@material-ui/core";
+import { Button, Nav} from 'react-bootstrap';
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -17,6 +16,10 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const onClick = async (e) => {
+    navigate('/');
   };
 
   const handleClick = async (e) => {
@@ -38,11 +41,11 @@ const Navbar = () => {
       
       <div className="logo">
         <BsCode color="#fff" size={33} />
-        <Link to = '/' style={{ textDecoration: 'none' }}>
-        <p className="logo-text">
+        
+        <p className="logo-text" onClick={onClick}>
           Bud<span>Code</span>
         </p>
-        </Link>
+        
         <BsCodeSlash color="#fff" size={33} />
       </div>
       {localStorage.getItem('username') ?
@@ -69,7 +72,7 @@ const Navbar = () => {
           </li>
          
           <li>
-            <a href={`/notification/user/${username}`}>Notifications</a>
+            <a href={`/notification/${username}`}>Notifications</a>
           </li>
           <li className="nav-btn">
             <Button variant="outline-info" value= 'logout'  type="submit" onClick={handleClick}>

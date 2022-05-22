@@ -7,7 +7,7 @@ import { axiosInstance } from '../util/config';
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from '../util/config';
 import { boolean } from 'yup';
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
 
 
 export default function Notification() {
@@ -133,6 +133,7 @@ export default function Notification() {
     };
 
     console.log(memberRequests);
+    console.log(notifications);
 
     return (
         <section id="header">  
@@ -153,6 +154,7 @@ export default function Notification() {
                                         {notification.body}
                                         </Card.Text>    
                                     </Card.Body>
+                                    <Card.Footer className="text-muted">{notification.time.substring(0,10)}</Card.Footer>
                                 </Card>
                             );
                         }

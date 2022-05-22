@@ -302,16 +302,41 @@ export default function ProjectPage() {
                             </Modal.Footer>
                         </Modal>
                     
-                    <div className= "project-details">
-                    <Row>
-                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                        Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower(s) | Status: <Badge pill bg="success">
-                            {status}
-                        </Badge>
-                        </Typography>
-                    </Row>
-                    </div>
+                    {numOfFollowers == 0  && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
+                    {numOfFollowers == 1 && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
+                    {numOfFollowers >= 2 && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Followers | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
 
+                 
                     {/* <div className="transition-div">
                         <motion.div transition={{layout: {duration: 1}}} 
                         layout
@@ -618,15 +643,40 @@ export default function ProjectPage() {
                          </Modal.Footer>
                      </Modal>
 
-                     <div className= "project-details">
-                    <Row>
-                        <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                        Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower(s) | Status: <Badge pill bg="success">
-                            {status}
-                        </Badge>
-                        </Typography>
-                    </Row>
-                    </div>
+                     {numOfFollowers == 0  && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
+                    {numOfFollowers == 1 && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
+                    {numOfFollowers >= 2 && (  
+                            <div className= "project-details">
+                            <Row>
+                                <Typography variant="h7" align="center" color="textSecondary" paragraph>
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Followers | Status: <Badge pill bg="success">
+                                    {status}
+                                </Badge>
+                                </Typography>
+                            </Row>
+                            </div>       
+                    )}
+                    
 
                     {/* <div className="transition-div">
                         <motion.div transition={{layout: {duration: 1}}} 
