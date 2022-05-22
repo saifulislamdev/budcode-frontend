@@ -9,6 +9,7 @@ import {
   ListGroup,
   Card,
   Alert,
+  Modal,
 } from 'react-bootstrap';
 import { UserContext } from '../util/context';
 import { axiosInstance } from '../util/config';
@@ -17,6 +18,7 @@ import Rating from './Rating';
 import Carousel from 'react-bootstrap/Carousel';
 import gradientPic from '../assets/gradientPic.jpg';
 import NotFound from './NotFound';
+
 
 export default function ProfilePage() {
   const { id } = useParams();
@@ -41,8 +43,6 @@ export default function ProfilePage() {
   const [projectMemberships, setProjectMemberships] = useState([]);
   const [visitingUserMutualProjects, setVisitingUserMutualProjects] = useState([]);
   const [canReview, setCanReview] = useState(false);
-
-  console.log('projectFollowings', projectFollowings);
 
   const getUser = useCallback(async (id) => {
     await axiosInstance
@@ -488,27 +488,71 @@ export default function ProfilePage() {
 
               <Col>
                 <Form.Label>Links</Form.Label>
-                {links.map((link) => {
-                  return (
+                {!(links.length == 0) && (
+                    links.map((link) => {
+                      return (
+                        <Form>
+                          <Form.Group
+                            className='mb-3'
+                            controlId='exampleForm.ControlTextarea1'
+                          >
+                            <Form.Control
+                              type='text'
+                              defaultValue={link.type}
+                              onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
+                            />
+                            <Form.Control
+                              type='text'
+                              defaultValue={link.link}
+                              onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
+                            />
+                          </Form.Group>
+                        </Form>
+                      );
+                    })
+                )}
+                {(links.length == 0) && (
+                    
                     <Form>
-                      <Form.Group
-                        className='mb-3'
-                        controlId='exampleForm.ControlTextarea1'
-                      >
-                        <Form.Control
-                          type='text'
-                          defaultValue={link.type}
-                          onChange={(e) => {link.type = e.target.value; setLinks([...links]);}}
-                        />
-                        <Form.Control
-                          type='text'
-                          defaultValue={link.link}
-                          onChange={(e) => {link.link = e.target.value; setLinks([...links]);}}
-                        />
-                      </Form.Group>
-                    </Form>
-                  );
-                })}
+                    <Form.Group
+                      className='mb-3'
+                      controlId='exampleForm.ControlTextarea1'
+                    >
+                      <Form.Control
+                        type='text'
+                        placeholder='type'
+                        defaultValue={links.type}
+                        onChange={(e) => {links.type = e.target.value; setLinks([...links]);}}
+                      />
+                      <Form.Control
+                        type='text'
+                        placeholder='link'
+                        defaultValue={links.link}
+                        onChange={(e) => {links.type = e.target.value; setLinks([...links]);}}
+                      />
+                    </Form.Group>
+                    <Form.Group
+                      className='mb-3'
+                      controlId='exampleForm.ControlTextarea1'
+                    >
+                      <Form.Control
+                        type='text'
+                        placeholder='type'
+                        defaultValue={links.type}
+                        onChange={(e) => {links.type = e.target.value; setLinks([...links]);}}
+                      />
+                      <Form.Control
+                        type='text'
+                        placeholder='link'
+                        defaultValue={links.link}
+                        onChange={(e) => {links.type = e.target.value; setLinks([...links]);}}
+                      />
+                    </Form.Group>
+                  </Form>
+                    
+                )}
+
+               
               </Col>
             </Row>
             <Form.Group className='mb-3' controlId='submitform'>
@@ -555,3 +599,5 @@ export default function ProfilePage() {
     </section>
   );
 }
+
+
