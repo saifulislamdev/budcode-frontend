@@ -472,7 +472,7 @@ export default function ProfilePage() {
                     className='mb-3'
                     controlId='exampleForm.ControlTextarea1'
                   >
-                    <Form.Label>Interest </Form.Label>
+                    <Form.Label>Interests </Form.Label>
                     <Form.Control
                       as='textarea'
                       rows={3}
@@ -480,7 +480,7 @@ export default function ProfilePage() {
                       onChange={(e) => setInterests(e.target.value)}
                     />
                     <Form.Text className="text-muted">
-                    Enter your interests and separate with commas. Ex: (fontend, design, applications)
+                    Enter your interests and separate with commas. Ex: (frontend, design, applications)
                     </Form.Text>
                   </Form.Group>
                 </Form>
