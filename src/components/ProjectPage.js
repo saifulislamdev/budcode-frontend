@@ -306,7 +306,7 @@ export default function ProjectPage() {
                             <div className= "project-details">
                             <Row>
                                 <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Followers | Status: <Badge pill bg="success">
                                     {status}
                                 </Badge>
                                 </Typography>
@@ -647,7 +647,7 @@ export default function ProjectPage() {
                             <div className= "project-details">
                             <Row>
                                 <Typography variant="h7" align="center" color="textSecondary" paragraph>
-                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Follower | Status: <Badge pill bg="success">
+                                Creator: {creatorUserName} | Created: {createdAt.substring(0,10)} | {numOfFollowers} Followers | Status: <Badge pill bg="success">
                                     {status}
                                 </Badge>
                                 </Typography>
