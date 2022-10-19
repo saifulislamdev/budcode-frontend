@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5134dbb2-110c-4b3c-84b3-b31b510e0b7d/deploy-status)](https://app.netlify.com/sites/budcode/deploys)
 
-This is the frontend service for the BudCode project. The project is created with the PERN stack (PostgreSQL, Express, React, and Node). The frontend service was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our Spring 2022 CSc 59867 Senior Design Project II course at The City College of New York.
+This is the frontend service for the BudCode project, which was was developed by Anvinh Truong, Saiful Islam, and Tufayel Ahmed for our CSc 59867 Senior Design Project II course at The City College of New York Spring 2022.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
